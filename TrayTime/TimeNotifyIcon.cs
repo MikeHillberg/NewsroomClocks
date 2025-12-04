@@ -10,8 +10,9 @@ namespace TrayTime;
 public class TimeNotifyIcon : IDisposable, INotifyPropertyChanged
 {
     private Forms.NotifyIcon _notifyIcon;
-    private TimeZoneInfo _timeZone;
-    private MainWindow _mainWindow;
+    private TimeZoneInfo _timeZoneInfo;
+    private App _app;
+    private string _cityName;
 
     static internal ReadOnlyCollection<TimeZoneInfo> AllTimeZones;
 
@@ -22,30 +23,34 @@ public class TimeNotifyIcon : IDisposable, INotifyPropertyChanged
         AllTimeZones = TimeZoneInfo.GetSystemTimeZones();
     }
 
-    public TimeNotifyIcon(
-        MainWindow mainWindow,
-        TimeZoneInfo timeZone)
+    internal string CityName => _cityName;
+
+    internal TimeNotifyIcon(
+        App app,
+        TimeZoneInfo timeZoneInfo,
+        string cityName)
     {
-        _timeZone = timeZone;
-        _mainWindow = mainWindow;
+        _cityName = cityName;
+        _timeZoneInfo = timeZoneInfo!;
+        _app = app;
 
         _notifyIcon = new Forms.NotifyIcon();
         _notifyIcon.Visible = true;
-        _notifyIcon.Text = $"{timeZone.StandardName}";
+        _notifyIcon.Text = $"{_timeZoneInfo.StandardName}";
 
-        _notifyIcon.MouseClick += _mainWindow.NotifyIcon_MouseClick;
+        _notifyIcon.MouseClick += NotifyIcon_MouseClick;
 
         CreateContextMenu();
     }
 
     internal TimeZoneInfo TimeZone
     {
-        get => _timeZone;
+        get => _timeZoneInfo;
         set
         {
-            if (_timeZone != value)
+            if (_timeZoneInfo != value)
             {
-                _timeZone = value;
+                _timeZoneInfo = value;
                 RaisePropertyChanged();
                 Update();
             }
@@ -56,7 +61,7 @@ public class TimeNotifyIcon : IDisposable, INotifyPropertyChanged
     {
         get
         {
-            DateTime time = TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow, _timeZone);
+            DateTime time = TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow, _timeZoneInfo);
             return time.ToString("f");
         }
     }
@@ -70,16 +75,19 @@ public class TimeNotifyIcon : IDisposable, INotifyPropertyChanged
         PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
     }
 
-    //public void SetContextMenu(Forms.ContextMenuStrip contextMenu)
-    //{
-    //    _notifyIcon.ContextMenuStrip = contextMenu;
-    //}
+    private void NotifyIcon_MouseClick(object? sender, Forms.MouseEventArgs e)
+    {
+        if (e.Button == Forms.MouseButtons.Left)
+        {
+            _app.ShowMainWindow();
+        }
+    }
 
     void CreateContextMenu()
     {
         var contextMenu = new Forms.ContextMenuStrip();
         var exitMenuItem = new Forms.ToolStripMenuItem("Exit");
-        exitMenuItem.Click += (s, e) => _mainWindow.ExitApplication(); ;
+        exitMenuItem.Click += (s, e) => _app.ExitApplication();
         contextMenu.Items.Add(exitMenuItem);
         _notifyIcon.ContextMenuStrip = contextMenu;
     }
@@ -87,11 +95,11 @@ public class TimeNotifyIcon : IDisposable, INotifyPropertyChanged
     public void Update()
     {
         // Get current time in the specified time zone
-        DateTime time = TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow, _timeZone);
+        DateTime time = TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow, _timeZoneInfo);
 
-        bool hoursOnly = _mainWindow.HoursOnly;
+        bool hoursOnly = App.Instance.HoursOnly;
         string timeText = hoursOnly ? time.ToString("hh") : time.ToString("h:mm");
-        _notifyIcon.Text = $"{_timeZone.StandardName}: {time:h:mm tt}";
+        _notifyIcon.Text = $"{_timeZoneInfo.StandardName}: {time:h:mm tt}";
 
         // Dispose of the previous icon to avoid memory leak
         var oldIcon = _notifyIcon.Icon;

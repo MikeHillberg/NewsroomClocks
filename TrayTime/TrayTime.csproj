@@ -13,7 +13,13 @@
 		<Nullable>enable</Nullable>
 	</PropertyGroup>
 	<ItemGroup>
+	  <Content Remove="Assets\cityMap.json" />
 	  <Content Remove="Assets\Design.png" />
+	  <Content Remove="Assets\Iana2WindowsTimeZoneID.txt" />
+	  <Content Remove="Assets\windowsZones.xml" />
+	</ItemGroup>
+	<ItemGroup>
+	  <None Remove="AddTimeZoneDialog.xaml" />
 	</ItemGroup>
 
 	<ItemGroup>
@@ -36,6 +42,21 @@
 
 	<ItemGroup>
 		<FrameworkReference Include="Microsoft.WindowsDesktop.App.WindowsForms" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <Page Update="AddTimeZoneDialog.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </Page>
+	  <None Update="Assets\cityMap.json">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </None>
+	  <None Update="Assets\Iana2WindowsTimeZoneID.txt">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </None>
+	  <None Update="Assets\windowsZones.xml">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </None>
 	</ItemGroup>
 
 	<!--

@@ -13,64 +13,86 @@
         <MicaBackdrop />
     </Window.SystemBackdrop>
 
-    <Grid Margin="50">
-        <StackPanel Spacing="10">
-            <TextBlock Text="Select Time Zone" 
+    <ScrollViewer>
+        <Grid Margin="50">
+            <StackPanel Spacing="10">
+
+                <!--<AutoSuggestBox x:Name="_asb"
+                            TextChanged="AutoSuggestBox_TextChanged"
+                            SuggestionChosen="AutoSuggestBox_SuggestionChosen"
+                            PlaceholderText="Search for a city...">
+            </AutoSuggestBox>-->
+
+
+                <TextBlock Text="Select Time Zone" 
                        Style="{StaticResource SubtitleTextBlockStyle}"/>
 
-            <ItemsControl ItemsSource="{x:Bind _timeNotifyIcons}">
-                <ItemsControl.ItemTemplate>
-                    <DataTemplate x:DataType="local:TimeNotifyIcon">
-                        <Grid ColumnDefinitions="Auto,*" ColumnSpacing="10" RowDefinitions="Auto,Auto"
+                <ItemsControl ItemsSource="{x:Bind local:App.Instance.TimeNotifyIcons}">
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate x:DataType="local:TimeNotifyIcon">
+                            <Grid ColumnDefinitions="Auto,*" ColumnSpacing="10" RowDefinitions="Auto,Auto"
                               Margin="0,0,0,10">
-                            <Button Grid.Column="1">
-                                <FontIcon Glyph="&#xE74D;" FontSize="17"/>
-                            </Button>
-                            
-                            <ComboBox Grid.Column="0" 
+                                <Button Grid.Column="1" Click="DeleteTimeZone" Tag="{Binding}">
+                                    <FontIcon Glyph="&#xE74D;" FontSize="17"/>
+                                </Button>
+
+                                <!--<ComboBox Grid.Column="0" 
                                       ItemsSource="{x:Bind local:TimeNotifyIcon.AllTimeZones}"
                                       SelectedItem="{x:Bind TimeZone}"
                                       Tag="{Binding}"
-                                      Loaded="ComboBox_Loaded"
                                       Width="400"
                                       HorizontalAlignment="Left"
                                       SelectionChanged="TimeZoneComboBox_SelectionChanged">
-                                <ComboBox.ItemTemplate>
-                                    <DataTemplate x:DataType="system:TimeZoneInfo">
-                                        <TextBlock Text="{x:Bind DisplayName}" />
-                                    </DataTemplate>
-                                </ComboBox.ItemTemplate>
-                            </ComboBox>
+                                    <ComboBox.ItemTemplate>
+                                        <DataTemplate x:DataType="system:TimeZoneInfo">
+                                            <StackPanel>
+                                                <TextBlock Text="{x:Bind DisplayName}" />
+                                                <TextBlock Text="{x:Bind StandardName}" />
+                                            </StackPanel>
+                                        </DataTemplate>
+                                    </ComboBox.ItemTemplate>
+                                </ComboBox>-->
 
-                            <TextBlock Grid.Column="0" Grid.Row="1"
-                                       Margin="13,0,0,0"
-                                       Text="{x:Bind CurrentTime}"
-                                       Style="{StaticResource BodyTextBlockStyle}"/>
-                        </Grid>
-                    </DataTemplate>
-                </ItemsControl.ItemTemplate>
-            </ItemsControl>
+                                <StackPanel Margin="13,10,0,0" Grid.Row="0">
+                                    <TextBlock Text="{x:Bind CityName}"
+                                               FontWeight="Bold"
+                                               Style="{StaticResource BodyTextBlockStyle}"/>
+                                    <TextBlock Text="{x:Bind CurrentTime}"
+                                               Style="{StaticResource BodyTextBlockStyle}"/>
+                                </StackPanel>
+                            </Grid>
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                </ItemsControl>
 
-            <Button Click="AddTimeZoneClick">
-                <FontIcon Glyph="&#xE710;" FontSize="17"/>
-            </Button>
+                <Button Click="AddTimeZoneClick2">
+                    <FontIcon Glyph="&#xE710;" FontSize="17"/>
+                </Button>
 
-            <TextBlock Text="Size" 
+                <TextBlock Text="Size" 
                        Margin="0,10,0,0"
                        Style="{StaticResource SubtitleTextBlockStyle}"/>
 
-            <StackPanel>
-                <RadioButton IsChecked="{x:Bind HoursOnly, Mode=TwoWay}">Hour</RadioButton>
-                <RadioButton IsChecked="{x:Bind Not(HoursOnly)}">Hour : Minute</RadioButton>
+                <StackPanel>
+                    <RadioButton IsChecked="{x:Bind local:App.Instance.HoursOnly, Mode=TwoWay}">Hour</RadioButton>
+                    <RadioButton IsChecked="{x:Bind Not(local:App.Instance.HoursOnly)}">Hour : Minute</RadioButton>
+                </StackPanel>
+
+                <TextBlock Text="Startup" 
+                       Margin="0,10,0,0"
+                       Style="{StaticResource SubtitleTextBlockStyle}"/>
+
+                <ToggleSwitch Header="Start automatically when I sign in" 
+                          IsOn="{x:Bind local:App.Instance.IsStartupEnabled, Mode=TwoWay}" />
+
+                <TextBlock Text="Debug" 
+                       Margin="0,10,0,0"
+                       Style="{StaticResource SubtitleTextBlockStyle}"/>
+                <Button Click="CreateIndexClick">Index</Button>
+                <Button Click="MapClick">Map</Button>
+
+
             </StackPanel>
-
-            <TextBlock Text="Startup" 
-                       Margin="0,10,0,0"
-                       Style="{StaticResource SubtitleTextBlockStyle}"/>
-
-            <ToggleSwitch Header="Start automatically when I sign in" 
-                          IsOn="{x:Bind IsStartupEnabled, Mode=TwoWay}" />
-
-        </StackPanel>
-    </Grid>
+        </Grid>
+    </ScrollViewer>
 </Window>

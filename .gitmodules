@@ -1,0 +1,6 @@
+[submodule "city-timezones"]
+	path = city-timezones
+	url = https://github.com/kevinroberts/city-timezones.git
+[submodule "TrayTime/Submodules/cldr"]
+	path = TrayTime/Submodules/cldr
+	url = https://github.com/unicode-org/cldr.git

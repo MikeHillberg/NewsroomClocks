@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ContentDialog
+    x:Class="TrayTime.AddTimeZoneDialog"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:TrayTime"
+    CloseButtonText="Cancel"
+    PrimaryButtonText="OK"
+    IsPrimaryButtonEnabled="{x:Bind IsValid}"
+    x:DefaultBindMode="OneWay">
+
+    <StackPanel>
+        <AutoSuggestBox x:Name="_asb"
+                        Margin="0,0,0,10"
+                        TextChanged="AutoSuggestBox_TextChanged"
+                        SuggestionChosen="AutoSuggestBox_SuggestionChosen"
+                        PlaceholderText="Search for a city...">
+        </AutoSuggestBox>
+
+        <TextBlock Text="{x:Bind CityDetails.TimeZoneInfo.DisplayName}" />
+        <TextBlock Text="{x:Bind CityDetails.Timezone}" />
+
+    </StackPanel>
+</ContentDialog>
