@@ -1,0 +1,14 @@
+Shell_NotifyIcon
+CreatePopupMenu
+AppendMenu
+TrackPopupMenuEx
+DestroyMenu
+SetForegroundWindow
+PostMessage
+GetCursorPos
+DestroyIcon
+GetModuleHandle
+RegisterClassEx
+CreateWindowEx
+DestroyWindow
+DefWindowProc

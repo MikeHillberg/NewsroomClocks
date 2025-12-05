@@ -144,7 +144,10 @@ public sealed partial class MainWindow : Window
             sb.AppendLine($"{kvp.Key} : {kvp.Value}");
         }
 
-        System.Windows.Forms.Clipboard.SetText(sb.ToString());
+        // TODO: Use WinUI clipboard instead
+        // System.Windows.Forms.Clipboard.SetText(sb.ToString());
+        Debug.WriteLine("Clipboard content (WinForms removed):");
+        Debug.WriteLine(sb.ToString());
     }
 
     async private void AddTimeZoneClick2(object sender, RoutedEventArgs e)

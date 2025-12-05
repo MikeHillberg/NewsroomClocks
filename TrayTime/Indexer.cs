@@ -4,7 +4,6 @@ using System.Diagnostics;
 using System.IO;
 using System.Text;
 using System.Threading.Tasks;
-using System.Windows.Forms;
 using Windows.Storage;
 
 namespace TrayTime;
@@ -92,7 +91,10 @@ internal class Indexer
                 {
                     sb2.AppendLine(@$"{i.Item1}:{i.Item2}:{i.Item3}");
                 }
-                Clipboard.SetText(sb2.ToString());
+                // TODO: Use WinUI clipboard instead
+                // Clipboard.SetText(sb2.ToString());
+                Debug.WriteLine("City index (WinForms Clipboard removed):");
+                Debug.WriteLine(sb2.ToString());
             }
         }
         catch (Exception ex)

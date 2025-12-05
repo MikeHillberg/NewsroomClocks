@@ -3,13 +3,12 @@ using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using Drawing = System.Drawing;
-using Forms = System.Windows.Forms;
 
 namespace TrayTime;
 
 public class TimeNotifyIcon : IDisposable, INotifyPropertyChanged
 {
-    private Forms.NotifyIcon _notifyIcon;
+    private Win32NotifyIcon _notifyIcon;
     private TimeZoneInfo _timeZoneInfo;
     private App _app;
     private string _cityName;
@@ -34,7 +33,7 @@ public class TimeNotifyIcon : IDisposable, INotifyPropertyChanged
         _timeZoneInfo = timeZoneInfo!;
         _app = app;
 
-        _notifyIcon = new Forms.NotifyIcon();
+        _notifyIcon = new Win32NotifyIcon();
         _notifyIcon.Visible = true;
         _notifyIcon.Text = $"{_timeZoneInfo.StandardName}";
 
@@ -75,9 +74,9 @@ public class TimeNotifyIcon : IDisposable, INotifyPropertyChanged
         PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
     }
 
-    private void NotifyIcon_MouseClick(object? sender, Forms.MouseEventArgs e)
+    private void NotifyIcon_MouseClick(object? sender, MouseButton button)
     {
-        if (e.Button == Forms.MouseButtons.Left)
+        if (button == MouseButton.Left)
         {
             _app.ShowMainWindow();
         }
@@ -85,11 +84,9 @@ public class TimeNotifyIcon : IDisposable, INotifyPropertyChanged
 
     void CreateContextMenu()
     {
-        var contextMenu = new Forms.ContextMenuStrip();
-        var exitMenuItem = new Forms.ToolStripMenuItem("Exit");
-        exitMenuItem.Click += (s, e) => _app.ExitApplication();
-        contextMenu.Items.Add(exitMenuItem);
-        _notifyIcon.ContextMenuStrip = contextMenu;
+        _notifyIcon.SetContextMenu(
+            ("Exit", () => _app.ExitApplication())
+        );
     }
 
     public void Update()
