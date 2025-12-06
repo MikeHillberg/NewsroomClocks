@@ -13,11 +13,11 @@ namespace TrayTime
 {
     public partial class App : Application, INotifyPropertyChanged
     {
-        static internal Window? MainWindow;
+        static internal Window? MainWindow = null;
         private const string HoursOnlySettingKey = "HoursOnlySetting";
         private const string TimeZonesSettingKey = "SavedTimeZones";
         private bool _hoursOnly = false;
-        private DispatcherTimer _timer;
+        private Microsoft.UI.Dispatching.DispatcherQueueTimer _timer;
         private bool _updateTimer = false;
         private ObservableCollection<TimeNotifyIcon> _timeNotifyIcons = new();
         private bool _isStartupEnabled = false;
@@ -76,7 +76,9 @@ namespace TrayTime
             _ = LoadStartupSettingAsync();
 
             // Initialize the timer to update the tray icon every minute
-            _timer = new DispatcherTimer();
+            // Use DispatcherQueueTimer which works with Application.Start()'s dispatcher
+            var dispatcherQueue = Microsoft.UI.Dispatching.DispatcherQueue.GetForCurrentThread();
+            _timer = dispatcherQueue.CreateTimer();
             _timer.Interval = TimeSpan.FromMinutes(1) - TimeSpan.FromSeconds(DateTime.Now.Second);
             _timer.Tick += Timer_Tick;
         }
@@ -121,7 +123,7 @@ namespace TrayTime
         /// <param name="args">Details about the launch request and process.</param>
         protected override void OnLaunched(Microsoft.UI.Xaml.LaunchActivatedEventArgs args)
         {
-            MainWindow = new MainWindow();
+            //MainWindow = new MainWindow();
 
             // Check if the app was launched by startup task
             bool launchedByStartup = IsLaunchedByStartupTask();
@@ -129,13 +131,13 @@ namespace TrayTime
             // Only show and activate the window if not launched by startup
             if (!launchedByStartup)
             {
-                MainWindow.Activate();
+                //MainWindow.Activate();
             }
 
             // Load saved time zones
             LoadTimeZones();
 
-            // Start timer after window is created
+            // Start timer after dispatcher queue is ready
             _timer.Start();
 
             // Set initial time
@@ -283,7 +285,12 @@ namespace TrayTime
 
         public void ShowMainWindow()
         {
-            MainWindow?.AppWindow.Show();
+            if (MainWindow == null)
+            {
+                MainWindow = new MainWindow();
+            }
+            
+            MainWindow.Activate();
         }
 
         public void ExitApplication()
