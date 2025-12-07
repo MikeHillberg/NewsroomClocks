@@ -10,7 +10,7 @@ public class TimeNotifyIcon : IDisposable, INotifyPropertyChanged
 {
     private Win32NotifyIcon _notifyIcon;
     private TimeZoneInfo _timeZoneInfo;
-    private App _app;
+    private Manager _app;
     private string _cityName;
 
     static internal ReadOnlyCollection<TimeZoneInfo> AllTimeZones;
@@ -25,7 +25,7 @@ public class TimeNotifyIcon : IDisposable, INotifyPropertyChanged
     internal string CityName => _cityName;
 
     internal TimeNotifyIcon(
-        App app,
+        Manager app,
         TimeZoneInfo timeZoneInfo,
         string cityName)
     {
@@ -78,7 +78,7 @@ public class TimeNotifyIcon : IDisposable, INotifyPropertyChanged
     {
         if (button == MouseButton.Left)
         {
-            _app.ShowMainWindow();
+            App.ShowMainWindow();
         }
     }
 
@@ -94,7 +94,7 @@ public class TimeNotifyIcon : IDisposable, INotifyPropertyChanged
         // Get current time in the specified time zone
         DateTime time = TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow, _timeZoneInfo);
 
-        bool hoursOnly = App.Instance.HoursOnly;
+        bool hoursOnly = Manager.Instance!.HoursOnly;
         string timeText = hoursOnly ? time.ToString("hh") : time.ToString("h:mm");
         _notifyIcon.Text = $"{_timeZoneInfo.StandardName}: {time:h:mm tt}";
 

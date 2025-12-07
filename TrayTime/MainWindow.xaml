@@ -27,7 +27,7 @@
                 <TextBlock Text="Select Time Zone" 
                        Style="{StaticResource SubtitleTextBlockStyle}"/>
 
-                <ItemsControl ItemsSource="{x:Bind local:App.Instance.TimeNotifyIcons}">
+                <ItemsControl ItemsSource="{x:Bind local:Manager.Instance.TimeNotifyIcons}">
                     <ItemsControl.ItemTemplate>
                         <DataTemplate x:DataType="local:TimeNotifyIcon">
                             <Grid ColumnDefinitions="Auto,*" ColumnSpacing="10" RowDefinitions="Auto,Auto"
@@ -74,8 +74,8 @@
                        Style="{StaticResource SubtitleTextBlockStyle}"/>
 
                 <StackPanel>
-                    <RadioButton IsChecked="{x:Bind local:App.Instance.HoursOnly, Mode=TwoWay}">Hour</RadioButton>
-                    <RadioButton IsChecked="{x:Bind Not(local:App.Instance.HoursOnly)}">Hour : Minute</RadioButton>
+                    <RadioButton IsChecked="{x:Bind local:Manager.Instance.HoursOnly, Mode=TwoWay}">Hour</RadioButton>
+                    <RadioButton IsChecked="{x:Bind Not(local:Manager.Instance.HoursOnly)}">Hour : Minute</RadioButton>
                 </StackPanel>
 
                 <TextBlock Text="Startup" 
@@ -83,7 +83,7 @@
                        Style="{StaticResource SubtitleTextBlockStyle}"/>
 
                 <ToggleSwitch Header="Start automatically when I sign in" 
-                          IsOn="{x:Bind local:App.Instance.IsStartupEnabled, Mode=TwoWay}" />
+                          IsOn="{x:Bind local:Manager.Instance.IsStartupEnabled, Mode=TwoWay}" />
 
                 <TextBlock Text="Debug" 
                        Margin="0,10,0,0"

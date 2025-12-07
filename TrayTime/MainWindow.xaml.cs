@@ -4,10 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
-using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
-//using System.Windows.Forms;
 using Windows.Storage;
 
 namespace TrayTime;
@@ -46,7 +43,7 @@ public sealed partial class MainWindow : Window
         }
 
         selectedTimeNotifyIcon.TimeZone = selectedTimeZoneInfo;
-        App.Instance.SaveTimeZones();
+        Manager.Instance!.SaveTimeZones();
     }
 
     private void AddTimeZoneClick(object sender, RoutedEventArgs e)
@@ -160,13 +157,13 @@ public sealed partial class MainWindow : Window
 
         if(result == ContentDialogResult.Primary)
         {
-            App.Instance.AddTimeZone(dialog.CityDetails!.TimeZoneInfo!, dialog.CityDetails.ToString());
+            Manager.Instance!.AddTimeZone(dialog.CityDetails!.TimeZoneInfo!, dialog.CityDetails.ToString());
         }
     }
 
     private void DeleteTimeZone(object sender, RoutedEventArgs e)
     {
         TimeNotifyIcon icon = ((sender as Button)!.Tag as TimeNotifyIcon)!;
-        App.Instance.RemoveTimeZone(icon);
+        Manager.Instance!.RemoveTimeZone(icon);
     }
 }
