@@ -9,18 +9,14 @@ using Windows.Storage;
 
 namespace TrayTime;
 
-/// <summary>
-/// An empty window that can be used on its own or navigated to within a Frame.
-/// </summary>
 public sealed partial class MainWindow : Window
 {
     public MainWindow()
     {
         InitializeComponent();
 
-        // Get the AppWindow for this XAML Window (WinAppSDK 1.4+)
+        // When the user closes the window, hide it instead
         var appWindow = this.AppWindow;
-
         appWindow.Closing += (sender, args) =>
         {
             // Cancel the close; keep the app alive.
@@ -33,68 +29,40 @@ public sealed partial class MainWindow : Window
 
     bool Not(bool b) => !b;
 
-    private void TimeZoneComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
-    {
-        TimeZoneInfo selectedTimeZoneInfo = ((sender as ComboBox)!.SelectedItem as TimeZoneInfo)!;
-        TimeNotifyIcon selectedTimeNotifyIcon = ((sender as ComboBox)!.Tag as TimeNotifyIcon)!;
-        if (selectedTimeNotifyIcon == null || selectedTimeZoneInfo == null)
-        {
-            return;
-        }
+    //private void TimeZoneComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
+    //{
+    //    TimeZoneInfo selectedTimeZoneInfo = ((sender as ComboBox)!.SelectedItem as TimeZoneInfo)!;
+    //    TimeNotifyIcon selectedTimeNotifyIcon = ((sender as ComboBox)!.Tag as TimeNotifyIcon)!;
+    //    if (selectedTimeNotifyIcon == null || selectedTimeZoneInfo == null)
+    //    {
+    //        return;
+    //    }
 
-        selectedTimeNotifyIcon.TimeZone = selectedTimeZoneInfo;
-        Manager.Instance!.SaveTimeZones();
-    }
+    //    selectedTimeNotifyIcon.TimeZone = selectedTimeZoneInfo;
+    //    Manager.Instance!.SaveTimeZoneSettings();
+    //}
 
-    private void AddTimeZoneClick(object sender, RoutedEventArgs e)
-    {
-        //App.Instance.AddTimeZone(TimeZoneInfo.Local);
-    }
+    //private void AddTimeZoneClick(object sender, RoutedEventArgs e)
+    //{
+    //    //App.Instance.AddTimeZone(TimeZoneInfo.Local);
+    //}
 
+    // Debug tool
     private void CreateIndexClick(object sender, RoutedEventArgs e)
     {
         Indexer.ProcessFile();
     }
 
-    //private async void AutoSuggestBox_TextChanged(AutoSuggestBox sender, AutoSuggestBoxTextChangedEventArgs args)
+
+    //private void AutoSuggestBox_SuggestionChosen(AutoSuggestBox sender, AutoSuggestBoxSuggestionChosenEventArgs args)
     //{
-    //    // Only search when the user types
-    //    if (args.Reason == AutoSuggestionBoxTextChangeReason.UserInput)
-    //    {
-    //        var searchText = sender.Text;
-    //        if (string.IsNullOrWhiteSpace(searchText) || searchText.Length < 2)
-    //        {
-    //            sender.ItemsSource = null;
-    //            return;
-    //        }
+    //    // Set the chosen suggestion as the text
+    //    sender.Text = (args.SelectedItem as CityIndex)?.Name;
 
-    //        try
-    //        {
-    //            var cities = await Indexer.GetCityIndices();
-    //            var filteredCities = cities
-    //                .Where(city => city.Name.StartsWith(searchText, StringComparison.OrdinalIgnoreCase))
-    //                .Take(10) // Limit to 10 suggestions
-    //                          //.Select(city => city.Item3)
-    //                .ToList();
-
-    //            sender.ItemsSource = filteredCities;
-    //        }
-    //        catch (Exception ex)
-    //        {
-    //            Debug.WriteLine($"Error filtering cities: {ex.Message}");
-    //            sender.ItemsSource = null;
-    //        }
-    //    }
+    //    var cityDetails = Indexer.GetCityDetails((args.SelectedItem as CityIndex)!);
     //}
 
-    private void AutoSuggestBox_SuggestionChosen(AutoSuggestBox sender, AutoSuggestBoxSuggestionChosenEventArgs args)
-    {
-        // Set the chosen suggestion as the text
-        sender.Text = (args.SelectedItem as CityIndex)?.Name;
-
-        var cityDetails = Indexer.GetCityDetails((args.SelectedItem as CityIndex)!);
-    }
-
+    // Debug tool
     async private void MapClick(object sender, RoutedEventArgs e)
     {
         // bugbug: aliases are missing, like Asia/Kolkata
@@ -147,6 +115,9 @@ public sealed partial class MainWindow : Window
         Debug.WriteLine(sb.ToString());
     }
 
+    /// <summary>
+    /// Add a new time zone to the list
+    /// </summary>
     async private void AddTimeZoneClick2(object sender, RoutedEventArgs e)
     {
         var dialog = new AddTimeZoneDialog()
@@ -161,6 +132,9 @@ public sealed partial class MainWindow : Window
         }
     }
 
+    /// <summary>
+    /// Remove a time zone from the lst
+    /// </summary>
     private void DeleteTimeZone(object sender, RoutedEventArgs e)
     {
         TimeNotifyIcon icon = ((sender as Button)!.Tag as TimeNotifyIcon)!;

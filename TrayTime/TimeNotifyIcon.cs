@@ -6,40 +6,25 @@ using Drawing = System.Drawing;
 
 namespace TrayTime;
 
+/// <summary>
+/// Represents the time in a time zone as a notify icon
+/// </summary>
 public class TimeNotifyIcon : IDisposable, INotifyPropertyChanged
 {
     private Win32NotifyIcon _notifyIcon;
     private TimeZoneInfo _timeZoneInfo;
-    private Manager _app;
     private string _cityName;
-
-    static internal ReadOnlyCollection<TimeZoneInfo> AllTimeZones;
-
-    public event PropertyChangedEventHandler? PropertyChanged;
-
-    static TimeNotifyIcon()
-    {
-        AllTimeZones = TimeZoneInfo.GetSystemTimeZones();
-    }
 
     internal string CityName => _cityName;
 
     internal TimeNotifyIcon(
-        Manager app,
         TimeZoneInfo timeZoneInfo,
         string cityName)
     {
-        _cityName = cityName;
         _timeZoneInfo = timeZoneInfo!;
-        _app = app;
+        _cityName = cityName;
 
-        _notifyIcon = new Win32NotifyIcon();
-        _notifyIcon.Visible = true;
-        _notifyIcon.Text = $"{_timeZoneInfo.StandardName}";
-
-        _notifyIcon.MouseClick += NotifyIcon_MouseClick;
-
-        CreateContextMenu();
+        CreateNotifyIcon();
     }
 
     internal TimeZoneInfo TimeZone
@@ -51,7 +36,7 @@ public class TimeNotifyIcon : IDisposable, INotifyPropertyChanged
             {
                 _timeZoneInfo = value;
                 RaisePropertyChanged();
-                Update();
+                UpdateForCurrentTime();
             }
         }
     }
@@ -64,15 +49,6 @@ public class TimeNotifyIcon : IDisposable, INotifyPropertyChanged
             return time.ToString("f");
         }
     }
-    internal void UpdateCurrentTime()
-    {
-        RaisePropertyChanged(nameof(CurrentTime));
-    }
-
-    protected void RaisePropertyChanged([CallerMemberName] string propertyName = "")
-    {
-        PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
-    }
 
     private void NotifyIcon_MouseClick(object? sender, MouseButton button)
     {
@@ -82,28 +58,41 @@ public class TimeNotifyIcon : IDisposable, INotifyPropertyChanged
         }
     }
 
-    void CreateContextMenu()
+    void CreateNotifyIcon()
     {
+        _notifyIcon = new Win32NotifyIcon();
+        _notifyIcon.Visible = true;
+        _notifyIcon.Text = $"{_timeZoneInfo.StandardName}";
+
+        _notifyIcon.MouseClick += NotifyIcon_MouseClick;
+
         _notifyIcon.SetContextMenu(
-            ("Exit", () => _app.ExitApplication())
+            ("Exit", () => Manager.Instance?.ExitApplication())
         );
     }
 
-    public void Update()
+    public void UpdateForCurrentTime()
     {
         // Get current time in the specified time zone
         DateTime time = TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow, _timeZoneInfo);
 
+        // Update the icon text
         bool hoursOnly = Manager.Instance!.HoursOnly;
         string timeText = hoursOnly ? time.ToString("hh") : time.ToString("h:mm");
         _notifyIcon.Text = $"{_timeZoneInfo.StandardName}: {time:h:mm tt}";
 
+        // Create a new icon of the new time
         // Dispose of the previous icon to avoid memory leak
         var oldIcon = _notifyIcon.Icon;
         _notifyIcon.Icon = GenerateIcon(timeText, time, hoursOnly);
         oldIcon?.Dispose();
+
+        RaisePropertyChanged(nameof(CurrentTime));
     }
 
+    /// <summary>
+    /// Generate an icon of the given time
+    /// </summary>
     private Drawing.Icon GenerateIcon(string timeText, DateTime time, bool hoursOnly)
     {
         // Create icon at actual display size for better text rendering
@@ -171,4 +160,11 @@ public class TimeNotifyIcon : IDisposable, INotifyPropertyChanged
     {
         _notifyIcon?.Dispose();
     }
+
+    public event PropertyChangedEventHandler? PropertyChanged;
+    protected void RaisePropertyChanged([CallerMemberName] string propertyName = "")
+    {
+        PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+    }
+
 }

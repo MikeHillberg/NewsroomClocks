@@ -95,15 +95,20 @@ public class Win32NotifyIcon : IDisposable
         }
         set
         {
-            if (value != null && value.Length > 127)
-                value = value.Substring(0, 127);
-
-            unsafe
+            if (value != null)
             {
-                fixed (char* pText = _notifyIconData.szTip.AsSpan())
+                if (value.Length > 127)
                 {
-                    value.AsSpan().CopyTo(new Span<char>(pText, 128));
-                    pText[value.Length] = '\0';
+                    value = value.Substring(0, 127);
+                }
+
+                unsafe
+                {
+                    fixed (char* pText = _notifyIconData.szTip.AsSpan())
+                    {
+                        value.AsSpan().CopyTo(new Span<char>(pText, 128));
+                        pText[value.Length] = '\0';
+                    }
                 }
             }
 

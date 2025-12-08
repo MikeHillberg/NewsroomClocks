@@ -1,53 +1,45 @@
-﻿using Microsoft.Windows.AppLifecycle;
+﻿
+using Microsoft.Windows.AppLifecycle;
 using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
 using System.Runtime.CompilerServices;
-using System.Text;
 using System.Threading.Tasks;
 using Windows.Storage;
 
 namespace TrayTime;
-
-
-
 public class Manager : INotifyPropertyChanged
 {
+    static public Manager? Instance;
+    // Settings names
     private const string HoursOnlySettingKey = "HoursOnlySetting";
     private const string TimeZonesSettingKey = "SavedTimeZones";
 
-    private Microsoft.UI.Dispatching.DispatcherQueueTimer _timer;
-    private bool _updateTimer = false;
-    private ObservableCollection<TimeNotifyIcon> _timeNotifyIcons = new();
-    private bool _isStartupEnabled = false;
+    // The icons being display in the systray
+    public ObservableCollection<TimeNotifyIcon> TimeNotifyIcons => _timeNotifyIcons;
 
-    static public Manager? Instance;
+    private Microsoft.UI.Dispatching.DispatcherQueueTimer _updateIconsTimer;
+    private bool _timerIntervalNeedsReset = false;
+    private ObservableCollection<TimeNotifyIcon> _timeNotifyIcons = new();
+    private bool _isLaunchOnStartupEnabled = false;
+
 
     public Manager()
     {
         Instance = this;
 
-        // Load settings
-        _hoursOnly = LoadHoursOnlySetting();
-
-        // Load startup setting asynchronously
-        _ = LoadStartupSettingAsync();
+        // Load app settings
+        LoadAppSetting();
 
         // Initialize the timer to update the tray icon every minute
-        // Use DispatcherQueueTimer which works with Application.Start()'s dispatcher
         var dispatcherQueue = Microsoft.UI.Dispatching.DispatcherQueue.GetForCurrentThread();
-        _timer = dispatcherQueue.CreateTimer();
-        _timer.Interval = TimeSpan.FromMinutes(1) - TimeSpan.FromSeconds(DateTime.Now.Second);
-        _timer.Tick += Timer_Tick;
-
-
-        // Load saved time zones
-        LoadTimeZones();
+        _updateIconsTimer = dispatcherQueue.CreateTimer();
+        _updateIconsTimer.Tick += Timer_Tick;
+        _updateIconsTimer.Interval = TimeSpan.FromMinutes(1) - TimeSpan.FromSeconds(DateTime.Now.Second);
 
         // Start timer after dispatcher queue is ready
-        _timer.Start();
+        _updateIconsTimer.Start();
 
         // Set initial time
         UpdateTrayIcons();
@@ -73,8 +65,10 @@ public class Manager : INotifyPropertyChanged
             if (_hoursOnly != value)
             {
                 _hoursOnly = value;
-                SaveHoursOnlySetting(value);
                 RaisePropertyChanged();
+
+                var localSettings = ApplicationData.Current.LocalSettings;
+                localSettings.Values[HoursOnlySettingKey] = _hoursOnly;
             }
         }
     }
@@ -85,14 +79,14 @@ public class Manager : INotifyPropertyChanged
         PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
     }
 
-    public bool IsStartupEnabled
+    public bool IsLaunchOnStartupEnabled
     {
-        get => _isStartupEnabled;
+        get => _isLaunchOnStartupEnabled;
         set
         {
-            if (_isStartupEnabled != value)
+            if (_isLaunchOnStartupEnabled != value)
             {
-                _isStartupEnabled = value;
+                _isLaunchOnStartupEnabled = value;
                 RaisePropertyChanged();
                 UpdateStartup();
             }
@@ -101,36 +95,33 @@ public class Manager : INotifyPropertyChanged
 
     async void UpdateStartup()
     {
-        var succeeded = await StartupManager.SetStartupEnabled(IsStartupEnabled);
+        var succeeded = await StartupManager.SetStartupEnabled(IsLaunchOnStartupEnabled);
         if (!succeeded)
         {
             // Disabled by policy
             // bugbug: show a message to the user, disable the toggle
-            _isStartupEnabled = false;
-            RaisePropertyChanged(nameof(IsStartupEnabled));
+            _isLaunchOnStartupEnabled = false;
+            RaisePropertyChanged(nameof(IsLaunchOnStartupEnabled));
         }
     }
 
-    private async Task LoadStartupSettingAsync()
-    {
-        _isStartupEnabled = await StartupManager.IsStartupEnabledAsync();
-        RaisePropertyChanged(nameof(IsStartupEnabled));
-    }
-
-    private bool LoadHoursOnlySetting()
+    private async void LoadAppSetting()
     {
         var localSettings = ApplicationData.Current.LocalSettings;
+
+        // HoursOnly setting
+        _hoursOnly = false;
         if (localSettings.Values.ContainsKey(HoursOnlySettingKey))
         {
-            return localSettings.Values[HoursOnlySettingKey] as bool? ?? false;
+            _hoursOnly = localSettings.Values[HoursOnlySettingKey] as bool? ?? false;
         }
-        return false;
-    }
 
-    private void SaveHoursOnlySetting(bool hoursOnly)
-    {
-        var localSettings = ApplicationData.Current.LocalSettings;
-        localSettings.Values[HoursOnlySettingKey] = hoursOnly;
+        // Saved time zones
+        LoadTimeZonesSettings();
+
+        // LaunchOnStartup setting
+        _isLaunchOnStartupEnabled = await StartupManager.IsStartupEnabledAsync();
+        RaisePropertyChanged(nameof(IsLaunchOnStartupEnabled));
     }
 
     /// <summary>
@@ -161,40 +152,35 @@ public class Manager : INotifyPropertyChanged
         var now = DateTime.Now;
         if (now.Second != 0)
         {
-            _timer.Stop();
-            _timer.Interval = TimeSpan.FromSeconds(60 - now.Second);
-            _timer.Start();
-            _updateTimer = true;
+            // Out of sync with the system clock, reset timer interval to sync with the next minute
+            _updateIconsTimer.Stop();
+            _updateIconsTimer.Interval = TimeSpan.FromSeconds(60 - now.Second);
+            _updateIconsTimer.Start();
+            _timerIntervalNeedsReset = true;
         }
-        else if (_updateTimer)
+        else if (_timerIntervalNeedsReset)
         {
-            _updateTimer = false;
-            _timer.Stop();
-            _timer.Interval = TimeSpan.FromMinutes(1);
-            _timer.Start();
+            // In sync, but we were out of sync and set the timer to something other than 60s
+            // Set it back to 60s
+            _timerIntervalNeedsReset = false;
+            _updateIconsTimer.Stop();
+            _updateIconsTimer.Interval = TimeSpan.FromMinutes(1);
+            _updateIconsTimer.Start();
         }
 
+        // Update the icons in the sys tray, also the window if it's open
         UpdateTrayIcons();
-        UpdateCurrentTimeDisplay();
     }
 
     private void UpdateTrayIcons()
     {
         foreach (var notifyIcon in _timeNotifyIcons)
         {
-            notifyIcon.Update();
+            notifyIcon.UpdateForCurrentTime();
         }
     }
 
-    private void UpdateCurrentTimeDisplay()
-    {
-        foreach (var notifyIcon in _timeNotifyIcons)
-        {
-            notifyIcon.UpdateCurrentTime();
-        }
-    }
-
-    public void SaveTimeZones()
+    public void SaveTimeZoneSettings()
     {
         var localSettings = ApplicationData.Current.LocalSettings;
         var timeZoneList = _timeNotifyIcons
@@ -220,10 +206,9 @@ public class Manager : INotifyPropertyChanged
         //localSettings.Values[TimeZonesSettingKey] = string.Join(",", timeZoneIds);
     }
 
-    public void LoadTimeZones()
+    public void LoadTimeZonesSettings()
     {
         var localSettings = ApplicationData.Current.LocalSettings;
-        //var timeZoneList = new System.Collections.Generic.List<TimeZoneInfo>();
 
         if (localSettings.Values.ContainsKey(TimeZonesSettingKey))
         {
@@ -243,7 +228,7 @@ public class Manager : INotifyPropertyChanged
 
                         var timeZone = TimeZoneInfo.FindSystemTimeZoneById(parts[0]);
                         var cityName = parts.Length > 1 ? parts[1] : string.Empty;
-                        _timeNotifyIcons.Add(new TimeNotifyIcon(this, timeZone, cityName));
+                        _timeNotifyIcons.Add(new TimeNotifyIcon(timeZone, cityName));
 
                     }
                     catch (TimeZoneNotFoundException)
@@ -258,8 +243,8 @@ public class Manager : INotifyPropertyChanged
 
     public void AddTimeZone(TimeZoneInfo timeZone, string cityName)
     {
-        _timeNotifyIcons.Add(new TimeNotifyIcon(this, timeZone, cityName));
-        SaveTimeZones();
+        _timeNotifyIcons.Add(new TimeNotifyIcon(timeZone, cityName));
+        SaveTimeZoneSettings();
         UpdateTrayIcons();
     }
 
@@ -267,14 +252,12 @@ public class Manager : INotifyPropertyChanged
     {
         _timeNotifyIcons.Remove(timeNotifyIcon);
         timeNotifyIcon.Dispose();
-        SaveTimeZones();
+        SaveTimeZoneSettings();
     }
-
-    public ObservableCollection<TimeNotifyIcon> TimeNotifyIcons => _timeNotifyIcons;
 
     public void ExitApplication()
     {
-        StopTimer();
+        _updateIconsTimer?.Stop();
 
         foreach (var notifyIcon in _timeNotifyIcons)
         {
@@ -283,11 +266,4 @@ public class Manager : INotifyPropertyChanged
 
         Environment.Exit(0);
     }
-
-    public void StopTimer()
-    {
-        _timer?.Stop();
-    }
-
-
 }
