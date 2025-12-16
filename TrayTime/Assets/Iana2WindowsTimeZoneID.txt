@@ -289,7 +289,7 @@ Asia/Calcutta : India Standard Time
 Asia/Kolkata : India Standard Time
 Asia/Chennai : India Standard Time
 Asia/Colombo : Sri Lanka Standard Time
-Asia/Katmandu : Nepal Standard Time
+Asia/Kathmandu : Nepal Standard Time
 Asia/Bishkek : Central Asia Standard Time
 Antarctica/Vostok : Central Asia Standard Time
 Asia/Urumqi : Central Asia Standard Time

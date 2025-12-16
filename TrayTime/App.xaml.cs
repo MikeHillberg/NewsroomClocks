@@ -1,13 +1,6 @@
 ﻿using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using Microsoft.UI.Xaml;
-using Windows.Storage;
-using System.Collections.ObjectModel;
-using System;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.Windows.AppLifecycle;
-using Windows.ApplicationModel.Activation;
 
 namespace TrayTime
 {
@@ -25,6 +18,8 @@ namespace TrayTime
 
         static App? _instance;
         public static App Instance => _instance!;
+
+        public static IAssetProvider? AssetProvider;
 
         /// <summary>
         /// Initializes the singleton application object.  This is the first line of authored code

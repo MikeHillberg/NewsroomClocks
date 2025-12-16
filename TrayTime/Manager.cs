@@ -5,13 +5,17 @@ using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
 using System.Runtime.CompilerServices;
-using System.Threading.Tasks;
 using Windows.Storage;
 
 namespace TrayTime;
+
+/// <summary>
+/// App logic that runs even if there's no UI
+/// </summary>
 public class Manager : INotifyPropertyChanged
 {
     static public Manager? Instance;
+
     // Settings names
     private const string HoursOnlySettingKey = "HoursOnlySetting";
     private const string TimeZonesSettingKey = "SavedTimeZones";
@@ -24,35 +28,32 @@ public class Manager : INotifyPropertyChanged
     private ObservableCollection<TimeNotifyIcon> _timeNotifyIcons = new();
     private bool _isLaunchOnStartupEnabled = false;
 
+    internal static void EnsureCreated()
+    {
+        if (Instance == null)
+        {
+            _ = new Manager(); // static Instance set in constructor
+        }
+    }
 
-    public Manager()
+    private Manager()
     {
         Instance = this;
 
-        // Load app settings
+        // Saved settings like what time zones and how to display
         LoadAppSetting();
 
-        // Initialize the timer to update the tray icon every minute
+        // Create a dispatcher timer
         var dispatcherQueue = Microsoft.UI.Dispatching.DispatcherQueue.GetForCurrentThread();
         _updateIconsTimer = dispatcherQueue.CreateTimer();
+
+        // Initialize the timer to one once a minute, which is when the time gets updated on the notify icon
         _updateIconsTimer.Tick += Timer_Tick;
         _updateIconsTimer.Interval = TimeSpan.FromMinutes(1) - TimeSpan.FromSeconds(DateTime.Now.Second);
-
-        // Start timer after dispatcher queue is ready
         _updateIconsTimer.Start();
 
-        // Set initial time
+        // Set initial time in the notify icon to now
         UpdateTrayIcons();
-
-        // Check if the app was launched by startup task
-        bool launchedByStartup = IsLaunchedByStartupTask();
-
-        // Only show and activate the window if not launched by startup
-        if (!launchedByStartup)
-        {
-            //MainWindow.Activate();
-        }
-
 
     }
 
@@ -122,29 +123,6 @@ public class Manager : INotifyPropertyChanged
         // LaunchOnStartup setting
         _isLaunchOnStartupEnabled = await StartupManager.IsStartupEnabledAsync();
         RaisePropertyChanged(nameof(IsLaunchOnStartupEnabled));
-    }
-
-    /// <summary>
-    /// Checks if the application was launched by the startup task.
-    /// </summary>
-    /// <returns>True if launched by startup task, false otherwise.</returns>
-    private bool IsLaunchedByStartupTask()
-    {
-        try
-        {
-            var activatedArgs = AppInstance.GetCurrent().GetActivatedEventArgs();
-            if (activatedArgs != null)
-            {
-                // Check if the activation kind is StartupTask
-                return activatedArgs.Kind == ExtendedActivationKind.StartupTask;
-            }
-        }
-        catch (Exception)
-        {
-            // If we can't determine, default to false (show window)
-        }
-
-        return false;
     }
 
     private void Timer_Tick(object? sender, object e)

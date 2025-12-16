@@ -17,8 +17,8 @@
                         PlaceholderText="Search for a city...">
         </AutoSuggestBox>
 
-        <TextBlock Text="{x:Bind CityDetails.TimeZoneInfo.DisplayName}" />
-        <TextBlock Text="{x:Bind CityDetails.Timezone}" />
+        <TextBlock Text="{x:Bind CityInfo.TimeZoneInfo.DisplayName}" />
+        <TextBlock Text="{x:Bind CityInfo.IanaTimezone}" />
 
     </StackPanel>
 </ContentDialog>

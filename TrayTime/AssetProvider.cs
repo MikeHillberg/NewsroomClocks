@@ -1,0 +1,24 @@
+﻿using System;
+using System.Threading.Tasks;
+using Windows.Storage;
+
+namespace TrayTime;
+
+/// <summary>
+/// Read from the Assets folder as a StorageFile
+/// </summary>
+public interface IAssetProvider
+{
+    Task<StorageFile> GetAssetAsync(string assetPath);
+}
+
+internal class AssetProvider : IAssetProvider
+{
+    async public Task<StorageFile> GetAssetAsync(string assetName)
+    {
+        // Running the app, assets are in the msix package
+        var uri = new Uri($"ms-appx:///Assets/{assetName}");
+        var file = await StorageFile.GetFileFromApplicationUriAsync(uri);
+        return file;
+    }
+}

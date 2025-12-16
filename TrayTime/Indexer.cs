@@ -4,11 +4,12 @@ using System.Diagnostics;
 using System.IO;
 using System.Text;
 using System.Threading.Tasks;
+using Windows.ApplicationModel.DataTransfer;
 using Windows.Storage;
 
 namespace TrayTime;
 
-internal class Indexer
+public class Indexer
 {
 
     //{
@@ -25,8 +26,8 @@ internal class Indexer
     //},
 
 
-
-    async static internal void ProcessFile()
+    [Conditional("DEBUG")]
+    async static internal void CreateIndexOfCityMap()
     {
         // Get cityMap.json from resources as a FileStream
         var uri = new Uri("ms-appx:///Assets/cityMap.json");
@@ -46,9 +47,20 @@ internal class Indexer
                 int firstOffset = 0;
                 StringBuilder sb = new();
 
+                // Record variables
                 string city = "";
                 string province = "";
                 string country = "";
+                string timezone = "";
+
+                // Reinit the above variables
+                Action reinitRecordVariables = () =>
+                {
+                    city = "";
+                    province = "";
+                    country = "";
+                    timezone = "";
+                };
 
                 // Calculate byte length of newline for UTF8
                 int newlineByteLength = Encoding.UTF8.GetByteCount(Environment.NewLine);
@@ -60,29 +72,42 @@ internal class Indexer
                         firstOffset = offset;
                         sb = new();
                     }
-                    else if (line.Contains("city_ascii"))
+                    // Be careful to distinguish city from city_ascii
+                    else if (line.Contains(@"""city"""))
                     {
-                        city = GetValue(line);
+                        city = GetSecondFromColonSeparatedValue(line);
                     }
                     else if (line.Contains("province"))
                     {
-                        province = GetValue(line);
+                        province = GetSecondFromColonSeparatedValue(line);
                     }
                     else if (line.Contains("iso3"))
                     {
-                        country = GetValue(line);
+                        country = GetSecondFromColonSeparatedValue(line);
+                    }
+                    else if (line.Contains("timezone"))
+                    {
+                        timezone = GetSecondFromColonSeparatedValue(line);
                     }
 
-                    // Calculate byte offset instead of character offset
+                    // Update offset to be the next record
                     offset += Encoding.UTF8.GetByteCount(line) + newlineByteLength;
 
                     if (line.Trim().StartsWith("}"))
                     {
-                        index.Add((
-                            firstOffset,
-                            offset - firstOffset,
-                            $"{city}, {province}, {country}"
-                            ));
+                        // At the end of a record, so add to the index.
+                        // Skip though if it doesn't have a time zone (Antartica doesn't have a time zone)
+                        if (!timezone.Contains("null"))
+                        {
+                            index.Add((
+                                firstOffset,
+                                offset - firstOffset,
+                                $"{city}, {province}, {country}"
+                                ));
+                        }
+
+                        // Clear city/province/counter for the next pass
+                        reinitRecordVariables();
                     }
                 }
 
@@ -91,10 +116,11 @@ internal class Indexer
                 {
                     sb2.AppendLine(@$"{i.Item1}:{i.Item2}:{i.Item3}");
                 }
-                // TODO: Use WinUI clipboard instead
-                // Clipboard.SetText(sb2.ToString());
-                Debug.WriteLine("City index (WinForms Clipboard removed):");
-                Debug.WriteLine(sb2.ToString());
+
+                // bugbug: this isn't working
+                DataPackage dp = new();
+                dp.SetText(sb2.ToString());
+                Clipboard.SetContent(dp);
             }
         }
         catch (Exception ex)
@@ -103,75 +129,9 @@ internal class Indexer
         }
     }
 
-    static string GetValue(string line)
+    static string GetSecondFromColonSeparatedValue(string line)
     {
         return line.Split(':')[1].Trim().Trim(',', '"');
     }
 
-    static List<CityIndex>? _cities = null;
-
-    async public static Task<List<CityIndex>> GetCityIndices()
-    {
-        if (_cities == null)
-        {
-            _cities = new();
-
-            var uri = new Uri("ms-appx:///Assets/city-index.txt");
-            var file = await StorageFile.GetFileFromApplicationUriAsync(uri);
-            using (Stream fs = await file.OpenStreamForReadAsync())
-            using (StreamReader reader = new StreamReader(fs))
-            {
-                string? line;
-                while ((line = reader.ReadLine()) != null)
-                {
-                    var parts = line.Split(':');
-                    _cities.Add(new CityIndex(
-                        int.Parse(parts[0]), 
-                        int.Parse(parts[1]), 
-                        parts[2]));
-                }
-            }
-        }
-        return _cities;
-    }
-
-    static internal CityDetails GetCityDetails(CityIndex cityIndex)
-    {
-        var uri = new Uri("ms-appx:///Assets/cityMap.json");
-        var file =  StorageFile.GetFileFromApplicationUriAsync(uri).AsTask().Result;
-        using (Stream fs =  file.OpenStreamForReadAsync().Result)
-        {
-            fs.Seek(cityIndex.Offset, SeekOrigin.Begin);
-            using (StreamReader reader = new StreamReader(fs))
-            {
-                char[] buffer = new char[cityIndex.Length];
-                reader.ReadBlock(buffer, 0, cityIndex.Length);
-
-                string json = new string(buffer);
-                json = json.Replace("},", "}"); // Remove trailing comma if present
-
-                var cityDetails = System.Text.Json.JsonSerializer.Deserialize<CityDetails>(json);
-                return cityDetails!;
-            }
-        }
-    }
-
-}
-
-internal class CityIndex
-{
-    public int Offset { get; set; }
-    public int Length { get; set; }
-    public string Name { get; set; }
-    public CityIndex(int offset, int length, string name)
-    {
-        Offset = offset;
-        Length = length;
-        Name = name;
-    }
-
-    public override string ToString()
-    {
-        return Name;
-    }
 }

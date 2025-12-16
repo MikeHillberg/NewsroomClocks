@@ -40,7 +40,7 @@ namespace TrayTime
 
                 try
                 {
-                    var cities = await Indexer.GetCityIndices();
+                    var cities = await CityInfoLocation.GetCityIndices();
                     var filteredCities = cities
                         .Where(city => city.Name.StartsWith(searchText, StringComparison.OrdinalIgnoreCase))
                         .Take(10) // Limit to 10 suggestions
@@ -59,27 +59,29 @@ namespace TrayTime
 
         private async void AutoSuggestBox_SuggestionChosen(AutoSuggestBox sender, AutoSuggestBoxSuggestionChosenEventArgs args)
         {
-            sender.Text = (args.SelectedItem as CityIndex)?.Name;
+            var location = (args.SelectedItem as CityInfoLocation)!;
+            sender.Text = location.Name;
 
-            var cityDetails = Indexer.GetCityDetails((args.SelectedItem as CityIndex)!);
-            await cityDetails.LoadTimeZoneInfoAsync();
-            CityDetails = cityDetails;
-            Debug.WriteLine(cityDetails.TimeZoneInfo?.DisplayName);
+            var cityInfo = await location.GetCityInfoAsync();
+
+            await cityInfo.LoadTimeZoneInfoAsync();
+            CityInfo = cityInfo;
+            Debug.WriteLine(cityInfo.TimeZoneInfo?.DisplayName);
         }
 
-        private CityDetails? _cityDetails;
-        internal CityDetails? CityDetails
+        private CityInfo? _cityInfo;
+        internal CityInfo? CityInfo
         {
-            get => _cityDetails;
+            get => _cityInfo;
             set
             {
-                _cityDetails = value;
+                _cityInfo = value;
                 OnPropertyChanged();
                 OnPropertyChanged(nameof(IsValid));
             }
         }
 
-        bool IsValid => _cityDetails != null;
+        bool IsValid => _cityInfo != null;
 
 
         public event PropertyChangedEventHandler? PropertyChanged;

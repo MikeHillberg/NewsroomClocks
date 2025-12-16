@@ -1,4 +1,4 @@
-3:269:Qal eh-ye, Badghis, AFG
+3:269:Qal eh-ye Now, Badghis, AFG
 272:266:Chaghcharan, Ghor, AFG
 538:271:Lashkar Gah, Hilmand, AFG
 809:259:Zaranj, Nimroz, AFG
@@ -152,7 +152,7 @@
 39750:261:Lobito, Benguela, AGO
 40011:260:Xangongo, Cunene, AGO
 40271:258:Luena, Moxico, AGO
-40529:259:Tombua, Namibe, AGO
+40529:259:Tômbua, Namibe, AGO
 40788:262:Malanje, Malanje, AGO
 41050:265:Benguela, Benguela, AGO
 41315:263:Lubango, Huíla, AGO
@@ -160,46 +160,6 @@
 41839:270:Menongue, Cuando Cubango, AGO
 42109:259:Huambo, Huambo, AGO
 42368:260:Luanda, Luanda, AGO
-42628:257:Artigas Base, , ATA
-42885:285:Capitan Arturo Prat Station, , ATA
-43170:278:Vicecomodoro Marambio Station, , ATA
-43448:261:Terra Nova Bay, , ATA
-43709:260:Rothera Station, , ATA
-43969:260:Palmer Station, , ATA
-44229:286:Teniente Rodolfo Marsh Station, , ATA
-44515:269:Teniente Jubany Station, , ATA
-44784:270:King Sejong Station, , ATA
-45054:266:Great Wall Station, , ATA
-45320:260:Escudero Station, , ATA
-45580:284:Elephant Island, South Shetland Islands, , ATA
-45864:252:Scott Base, , ATA
-46116:261:McMurdo Station, , ATA
-46377:266:Zhongshan Station, , ATA
-46643:242:Vostok, , ATA
-46885:259:Peter I Island, , ATA
-47144:259:Mirny Station, , ATA
-47403:258:Mawson Station, , ATA
-47661:256:Davis Station, , ATA
-47917:282:Concordia Research Station, , ATA
-48199:256:Casey Station, , ATA
-48455:301:Amundsen–Scott South Pole Station, , ATA
-48756:253:Wasa Station, , ATA
-49009:258:Troll Station, , ATA
-49267:254:Svea Station, , ATA
-49521:278:Novolazarevskaya Station, , ATA
-49799:259:Neumayer, , ATA
-50058:256:Maitri Station, , ATA
-50314:258:Halley Station, , ATA
-50572:271:General Belgrano Station, , ATA
-50843:255:Doctor Sobral, , ATA
-51098:255:Aboa Station, , ATA
-51353:267:San Martín Station, , ATA
-51620:286:General Bernado O'Higgins Station, , ATA
-51906:268:Esperanza Station, , ATA
-52174:262:Orcadas Station, , ATA
-52436:264:Signy Island, , ATA
-52700:278:Dumont d'Urville Station, , ATA
-52978:255:Showa Station, , ATA
 53233:281:Saint John's, , ATG
 53514:300:28 de Noviembre, Santa Cruz, ARG
 53814:308:Gobernador Gregores, Santa Cruz, ARG
@@ -297,7 +257,6 @@
 80562:278:Rinconada, Jujuy, ARG
 80840:277:San Pedro, Jujuy, ARG
 81117:317:Libertador General San Martin, Jujuy, ARG
-81434:259:Chilecito, La Rioja, ARG
 81693:279:Chamical, La Rioja, ARG
 81972:280:Los Blancos, Salta, ARG
 82252:274:Cafayate, Salta, ARG
@@ -346,17 +305,16 @@
 94639:283:Santa Rosa, La Pampa, ARG
 94922:310:San Carlos de Bariloche, Río Negro, ARG
 95232:270:Salta, Salta, ARG
-95502:296:San Miguel de Tucuman, Tucumán, ARG
+95502:296:Tucumán, Tucumán, ARG
 95798:277:Formosa, Formosa, ARG
 96075:281:Santa Fe, Santa Fe, ARG
 96356:282:Rosario, Santa Fe, ARG
 96638:298:Puerto Deseado, Santa Cruz, ARG
 96936:295:Rio Gallegos, Santa Cruz, ARG
-97231:276:Comodoro Rivadavia, Chubut, ARG
 97507:278:Mendoza, Mendoza, ARG
 97785:307:Bahia Blanca, Ciudad de Buenos Aires, ARG
 98092:310:Mar del Plata, Ciudad de Buenos Aires, ARG
-98402:283:Cordoba, Córdoba, ARG
+98402:283:Córdoba, Córdoba, ARG
 98685:280:Posadas, Misiones, ARG
 98965:310:Buenos Aires, Ciudad de Buenos Aires, ARG
 99275:263:Ashtarak, Aragatsotn, ARM
@@ -745,7 +703,7 @@
 203296:267:Camiri, Santa Cruz, BOL
 203563:264:Cobija, Pando, BOL
 203827:272:San Matias, Santa Cruz, BOL
-204099:269:San Jose, Santa Cruz, BOL
+204099:269:San José, Santa Cruz, BOL
 204368:268:Trinidad, El Beni, BOL
 204636:260:Tarija, Tarija, BOL
 204896:264:Sucre, Chuquisaca, BOL
@@ -815,7 +773,7 @@
 222410:275:Araguari, Minas Gerais, BRA
 222685:275:Almenara, Minas Gerais, BRA
 222960:280:Varzea Grande, Mato Grosso, BRA
-223240:267:Caceres, Mato Grosso, BRA
+223240:267:Cáceres, Mato Grosso, BRA
 223507:304:Santana do Livramento, Rio Grande do Sul, BRA
 223811:275:Canoas, Rio Grande do Sul, BRA
 224086:274:Quarai, Rio Grande do Sul, BRA
@@ -938,7 +896,7 @@
 256213:265:Alenquer, Pará, BRA
 256478:267:Oriximina, Pará, BRA
 256745:261:Xinguara, Pará, BRA
-257006:261:Jacunda, Pará, BRA
+257006:261:Jacundá, Pará, BRA
 257267:257:Uruara, Pará, BRA
 257524:265:Altamira, Pará, BRA
 257789:270:Paragominas, Pará, BRA
@@ -1060,7 +1018,7 @@
 289482:268:Nova Vicosa, Bahia, BRA
 289750:267:Alagoinhas, Bahia, BRA
 290017:262:Juazeiro, Bahia, BRA
-290279:277:Vitoria, Espírito Santo, BRA
+290279:277:Vitória, Espírito Santo, BRA
 290556:277:Joao Pessoa, Paraíba, BRA
 290833:284:Campina Grande, Paraíba, BRA
 291117:286:Nova Friburgo, Rio de Janeiro, BRA
@@ -1125,7 +1083,7 @@
 307058:271:Garanhuns, Pernambuco, BRA
 307329:269:Caruaru, Pernambuco, BRA
 307598:271:Rio Branco, Acre, BRA
-307869:275:Sao Luis, Maranhão, BRA
+307869:275:São Luís, Maranhão, BRA
 308144:281:Porto Velho, Rondônia, BRA
 308425:269:Alvorada, Tocantins, BRA
 308694:282:Corumba, Mato Grosso do Sul, BRA
@@ -1159,7 +1117,7 @@
 316412:286:Florianopolis, Santa Catarina, BRA
 316698:280:Feira de Santana, Bahia, BRA
 316978:272:Boa Vista, Roraima, BRA
-317250:261:Macapa, Amapá, BRA
+317250:261:Macapá, Amapá, BRA
 317511:260:Belem, Pará, BRA
 317771:281:Brasilia, Distrito Federal, BRA
 318052:290:Porto Alegre, Rio Grande do Sul, BRA
@@ -1308,7 +1266,7 @@
 356397:267:Hall Beach, Nunavut, CAN
 356664:281:Lutselke, Northwest Territories, CAN
 356945:284:Hay River, Northwest Territories, CAN
-357229:280:Deline, Northwest Territories, CAN
+357229:280:Déline, Northwest Territories, CAN
 357509:281:Paulatuk, Northwest Territories, CAN
 357790:289:Tsiigehtchic, Northwest Territories, CAN
 358079:269:Owen Sound, Ontario, CAN
@@ -1444,8 +1402,8 @@
 393585:272:Attawapiskat, Ontario, CAN
 393857:266:Hamilton, Ontario, CAN
 394123:266:Windsor, Ontario, CAN
-394389:280:Trois Rivieres, Québec, CAN
-394669:269:Sept-Iles, Québec, CAN
+394389:280:Trois-Rivières, Québec, CAN
+394669:269:Sept-Îles, Québec, CAN
 394938:292:Corner Brook, Newfoundland and Labrador, CAN
 395230:274:Norway House, Manitoba, CAN
 395504:270:Flin Flon, Manitoba, CAN
@@ -1500,7 +1458,6 @@
 408831:271:Fort Smith, Alberta, CAN
 409102:275:Fort McMurray, Alberta, CAN
 409377:273:Peace River, Alberta, CAN
-409650:271:Fort St. John, British Columbia, CAN
 409921:262:Iqaluit, Nunavut, CAN
 410183:280:Cambridge Bay, Nunavut, CAN
 410463:272:Kugluktuk, Nunavut, CAN
@@ -1508,7 +1465,7 @@
 411023:265:Arviat, Nunavut, CAN
 411288:268:Taloyoak, Nunavut, CAN
 411556:264:Igloolik, Nunavut, CAN
-411820:261:Dawson, Yukon, CAN
+411820:261:Dawson City, Yukon, CAN
 412081:265:Timmins, Ontario, CAN
 412346:269:North Bay, Ontario, CAN
 412615:273:Kuujjuarapik, Québec, CAN
@@ -1531,9 +1488,9 @@
 417287:262:Ottawa, Ontario, CAN
 417549:269:Fort Severn, Ontario, CAN
 417818:275:Thunder Bay, Ontario, CAN
-418093:264:Quebec, Québec, CAN
+418093:264:Québec, Québec, CAN
 418357:270:Halifax, Nova Scotia, CAN
-418627:293:St. John's, Newfoundland and Labrador, CAN
+418627:293:St. John’s, Newfoundland and Labrador, CAN
 418920:275:Nain, Newfoundland and Labrador, CAN
 419195:290:Charlottetown, Prince Edward Island, CAN
 419485:269:Edmonton, Alberta, CAN
@@ -1669,7 +1626,7 @@
 454936:296:Santiago, Región Metropolitana de Santiago, CHL
 455232:252:Yumen, Gansu, CHN
 455484:259:Linxia, Gansu, CHN
-455743:260:Zuozhou, Beijing, CHN
+455743:260:Zhuozhou, Beijing, CHN
 456003:260:Sanming, Fujian, CHN
 456263:262:Huizhou, Guangdong, CHN
 456525:263:Chaozhou, Guangdong, CHN
@@ -1782,7 +1739,7 @@
 484363:258:Chengde, Hebei, CHN
 484621:260:Cangzhou, Hebei, CHN
 484881:259:Baoding, Hebei, CHN
-485140:260:Hunanghua, Hebei, CHN
+485140:260:Huanghua, Hebei, CHN
 485400:260:Dingzhou, Hebei, CHN
 485660:257:Nangong, Hebei, CHN
 485917:258:Linqing, Hebei, CHN
@@ -1864,7 +1821,7 @@
 505674:259:Xingyi, Guizhou, CHN
 505933:259:Anshun, Guizhou, CHN
 506192:257:Zunyi, Guizhou, CHN
-506449:264:Wanxian, Chongqing, CHN
+506449:264:Wanzhou, Chongqing, CHN
 506713:260:Huaibei, Anhui, CHN
 506973:251:Wuhu, Anhui, CHN
 507224:255:Luan, Anhui, CHN
@@ -2035,7 +1992,7 @@
 550156:253:Lhasa, Xizang, CHN
 550409:259:Hami, Xinjiang Uygur, CHN
 550668:262:Hotan, Xinjiang Uygur, CHN
-550930:265:Kashi, Xinjiang Uygur, CHN
+550930:265:Kashgar, Xinjiang Uygur, CHN
 551195:267:Yinchuan, Ningxia Hui, CHN
 551462:266:Pingxiang, Jiangxi, CHN
 551728:264:Qiqihar, Heilongjiang, CHN
@@ -2322,8 +2279,8 @@
 628072:268:Esbjerg, Syddanmark, DNK
 628340:281:Frederikshavn, Nordjylland, DNK
 628621:272:Aalborg, Nordjylland, DNK
-628893:268:Aarhus, Midtjylland, DNK
-629161:276:Kobenhavn, Hovedstaden, DNK
+628893:268:Århus, Midtjylland, DNK
+629161:276:København, Hovedstaden, DNK
 629437:261:Dikhil, Dikhil, DJI
 629698:267:Tadjoura, Tadjourah, DJI
 629965:273:Ali Sabih, Ali Sabieh, DJI
@@ -2338,7 +2295,7 @@
 632465:277:Moca, Espaillat, DOM
 632742:281:Salcedo, Hermanas, DOM
 633023:284:Jimani, Independencia, DOM
-633307:288:Elias Pina, Elias Pina, DOM
+633307:288:Comendador, Elias Pina, DOM
 633595:290:Pedernales, Pedernales, DOM
 633885:271:Azua, Azua, DOM
 634156:285:Bonao, Monseñor Nouel, DOM
@@ -2411,7 +2368,7 @@
 652591:262:El Alamein, Matruh, EGY
 652853:256:El Daba, Matruh, EGY
 653109:252:Salum, Matruh, EGY
-653361:266:Damanhur, Al Buhayrah, EGY
+653361:266:Damanhûr, Al Buhayrah, EGY
 653627:260:Samalut, Al Minya, EGY
 653887:262:Mallawi, Al Minya, EGY
 654149:265:Beni Mazar, Al Minya, EGY
@@ -2465,7 +2422,7 @@
 667095:266:Agordat, Gash Barka, ERI
 667361:260:Massawa, Debub, ERI
 667621:273:Keren, Semenawi Keyih Bahri, ERI
-667894:266:Adi Ugri, Maekel, ERI
+667894:266:Mendefera, Maekel, ERI
 668160:271:Assab, Debubawi Keyih Bahri, ERI
 668431:259:Asmara, Anseba, ERI
 668690:262:Haapsalu, Lääne, EST
@@ -2512,7 +2469,7 @@
 679875:265:Fox Bay, , FLK
 680140:266:Stanley, , FLK
 680406:271:Klaksvik, Eysturoyar, FRO
-680677:275:Torshavn, Eysturoyar, FRO
+680677:275:Tórshavn, Eysturoyar, FRO
 680952:278:Palikir, , FSM
 681230:254:Nandi, Western, FJI
 681484:258:Lautoka, Western, FJI
@@ -2523,8 +2480,8 @@
 682802:272:Mikkeli, Southern Savonia, FIN
 683074:280:Savonlinna, Southern Savonia, FIN
 683354:259:Pori, Satakunta, FIN
-683613:269:Sodankyla, Lapland, FIN
-683882:277:Jyvaskyla, Central Finland, FIN
+683613:269:Sodankylä, Lapland, FIN
+683882:277:Jyväskylä, Central Finland, FIN
 684159:269:Kuopio, Eastern Finland, FIN
 684428:280:Lappeenranta, South Karelia, FIN
 684708:269:Porvoo, Eastern Uusimaa, FIN
@@ -2657,15 +2614,15 @@
 718767:259:Furth, Bayern, DEU
 719026:266:Chemnitz, Sachsen, DEU
 719292:268:Bonn, Nordrhein-Westfalen, DEU
-719560:277:Munster, Nordrhein-Westfalen, DEU
-719837:283:Dusseldorf, Nordrhein-Westfalen, DEU
+719560:277:Münster, Nordrhein-Westfalen, DEU
+719837:283:Düsseldorf, Nordrhein-Westfalen, DEU
 720120:265:Ulm, Baden-Württemberg, DEU
 720385:276:Mannheim, Baden-Württemberg, DEU
 720661:277:Freiburg, Baden-Württemberg, DEU
 720938:262:Giessen, Hessen, DEU
 721200:265:Wiesbaden, Hessen, DEU
 721465:271:Bremerhaven, Bremen, DEU
-721736:273:Osnabruck, Niedersachsen, DEU
+721736:273:Osnabrück, Niedersachsen, DEU
 722009:270:Hannover, Niedersachsen, DEU
 722279:272:Gottingen, Niedersachsen, DEU
 722551:259:Gera, Thüringen, DEU
@@ -2688,7 +2645,7 @@
 727094:279:Rostock, Mecklenburg-Vorpommern, DEU
 727373:278:Stuttgart, Baden-Württemberg, DEU
 727651:258:Bremen, Bremen, DEU
-727909:265:Nurnberg, Bayern, DEU
+727909:265:Nürnberg, Bayern, DEU
 728174:276:Cologne, Nordrhein-Westfalen, DEU
 728450:264:Dresden, Sachsen, DEU
 728714:265:Frankfurt, Hessen, DEU
@@ -2716,7 +2673,7 @@
 734467:264:Lamia, Stereá Elláda, GRC
 734731:274:Polygyros, Kentriki Makedonia, GRC
 735005:285:Komatini, Anatoliki Makedonia kai Thraki, GRC
-735290:263:Piraievs, Attiki, GRC
+735290:263:Piraiévs, Attiki, GRC
 735553:260:Volos, Thessalia, GRC
 735813:256:Hania, Kriti, GRC
 736069:281:Kavala, Anatoliki Makedonia kai Thraki, GRC
@@ -2890,14 +2847,14 @@
 781586:279:Szolnok, Jász-Nagykun-Szolnok, HUN
 781865:268:Budapest, Budapest, HUN
 782133:273:Borgarnes, Vesturland, ISL
-782406:283:Egilsstadir, Austur-Hérað, ISL
-782689:283:Saudarkrokur, Akrahreppur, ISL
+782406:283:Egilsstaðir, Austur-Hérað, ISL
+782689:283:Sauðárkrókur, Akrahreppur, ISL
 782972:281:Selfoss, Biskupstungnahreppur, ISL
 783253:283:Hofn, Sveitarfélagið Hornafjörður, ISL
-783536:281:Isafjordur, Vestfirðir, ISL
+783536:281:Ísafjörður, Vestfirðir, ISL
 783817:268:Akureyi, Akureyri, ISL
-784085:271:Keflavik, Suðurnes, ISL
-784356:275:Reykjavik, Suðurnes, ISL
+784085:271:Keflavík, Suðurnes, ISL
+784356:275:Reykjavík, Suðurnes, ISL
 784631:250:Panaji, Goa, IND
 784881:264:Simla, Himachal Pradesh, IND
 785145:261:Gurugram, Haryana, IND
@@ -2906,7 +2863,7 @@
 785920:255:Hisar, Haryana, IND
 786175:259:Bhiwani, Haryana, IND
 786434:257:Ambala, Haryana, IND
-786691:267:Sopur, Jammu and Kashmir, IND
+786691:267:Sopore, Jammu and Kashmir, IND
 786958:274:Silvassa, Dadra and Nagar Haveli, IND
 787232:262:Kalyan, Maharashtra, IND
 787494:266:Bhusawal, Maharashtra, IND
@@ -3138,7 +3095,7 @@
 847607:261:Serang, Banten, IDN
 847868:267:Bekasi, Jakarta Raya, IDN
 848135:280:Singkawang, Kalimantan Barat, IDN
-848415:289:Tanjungkarang-Telubketung, Lampung, IDN
+848415:289:Bandar Lampung, Lampung, IDN
 848704:280:Perabumulih, Sumatera Selatan, IDN
 848984:257:Kuta, Bali, IDN
 849241:265:Singaraja, Bali, IDN
@@ -3224,7 +3181,6 @@
 870960:259:Borujerd, Lorestan, IRN
 871219:257:Malayer, Hamadan, IRN
 871476:256:Zanjan, Zanjan, IRN
-871732:255:Orumiyeh, West Azarbaijan, IRN
 871987:260:Ahar, East Azarbaijan, IRN
 872247:261:Sanandaj, Kordestan, IRN
 872508:271:Neyshabur, Razavi Khorasan, IRN
@@ -3412,11 +3368,11 @@
 920215:273:Mandeville, Manchester, JAM
 920488:279:Black River, Saint Elizabeth, JAM
 920767:265:Falmouth, Trelawny, JAM
-921032:284:Savanna La Mar, Westmoreland, JAM
+921032:284:Savanna-la-Mar, Westmoreland, JAM
 921316:275:Port Antonio, Portland, JAM
-921591:277:St. Anns Bay, Saint Ann, JAM
+921591:277:St. Ann's Bay, Saint Ann, JAM
 921868:272:Port Maria, Saint Mary, JAM
-922140:279:Halfway Tree, Saint Andrew, JAM
+922140:279:Half Way Tree, Saint Andrew, JAM
 922419:277:Port Morant, Saint Thomas, JAM
 922696:268:May Pen, Clarendon, JAM
 922964:285:Spanish Town, Saint Catherine, JAM
@@ -3690,7 +3646,7 @@
 993387:262:Maseru, Maseru, LSO
 993649:274:Barclayville, GrandKru, LBR
 993923:263:Voinjama, Lofa, LBR
-994186:270:Bentol, Montserrado, LBR
+994186:270:Bensonville, Montserrado, LBR
 994456:262:Kakata, Margibi, LBR
 994718:272:Sanniquellie, Nimba, LBR
 994990:270:Rivercess, River Cess, LBR
@@ -3737,7 +3693,7 @@
 1005804:264:Banghazi, Benghazi, LBY
 1006068:283:Tripoli, Tajura' wa an Nawahi al Arba, LBY
 1006351:257:Vaduz, , LIE
-1006608:272:Panevezys, Panevezio, LTU
+1006608:272:Panevežys, Panevezio, LTU
 1006880:271:Siauliai, Šiauliai, LTU
 1007151:269:Klaipeda, Klaipedos, LTU
 1007420:263:Kaunas, Kauno, LTU
@@ -3963,7 +3919,7 @@
 1066800:280:Ciudad Obregon, Sonora, MEX
 1067080:266:Navajoa, Sonora, MEX
 1067346:267:Caborca, Sonora, MEX
-1067613:269:Mazatlan, Sonora, MEX
+1067613:269:Mazatlán, Sonora, MEX
 1067882:267:Cananea, Sonora, MEX
 1068149:273:Huatabampo, Sonora, MEX
 1068422:276:Zacatecas, Zacatecas, MEX
@@ -4028,7 +3984,7 @@
 1084578:261:Ticul, Yucatán, MEX
 1084839:274:Ensenada, Baja California, MEX
 1085113:271:Saltillo, Coahuila, MEX
-1085384:280:Ciudad Juarez, Chihuahua, MEX
+1085384:280:Ciudad Juárez, Chihuahua, MEX
 1085664:270:Delicias, Chihuahua, MEX
 1085934:266:Durango, Durango, MEX
 1086200:271:Los Mochis, Sinaloa, MEX
@@ -4166,7 +4122,7 @@
 1122033:266:Maputo, Maputo, MOZ
 1122299:256:Loikaw, Kayah, MMR
 1122555:253:Pa-an, Kayin, MMR
-1122808:250:Haka, Chin, MMR
+1122808:250:Hakha, Chin, MMR
 1123058:260:Taunggyi, Shan, MMR
 1123318:259:Sagaing, Sagaing, MMR
 1123577:266:Myingyan, Mandalay, MMR
@@ -4219,16 +4175,16 @@
 1135893:260:Cuangar, Kavango, NAM
 1136153:277:Katima Mulilo, Caprivi, NAM
 1136430:274:Keetmanshoop, Karas, NAM
-1136704:267:Maltahohe, Hardap, NAM
+1136704:267:Maltahöhe, Hardap, NAM
 1136971:268:Swakopmund, Erongo, NAM
 1137239:267:Ongwediva, Oshana, NAM
 1137506:260:Rundu, Kavango, NAM
 1137766:265:Tsumeb, Oshikoto, NAM
-1138031:265:Luderitz, Karas, NAM
+1138031:265:Lüderitz, Karas, NAM
 1138296:271:Walvis Bay, Erongo, NAM
 1138567:265:Windhoek, Khomas, NAM
 1138832:281:Grootfontein, Otjozondjupa, NAM
-1139113:257:Sallyan, Rapti, NPL
+1139113:257:Salyan, Rapti, NPL
 1139370:264:Baglung, Dhawalagiri, NPL
 1139634:255:Jumla, Karnali, NPL
 1139889:262:Bhairawa, Lumbini, NPL
@@ -4299,7 +4255,6 @@
 1157603:267:Jinotepe, Carazo, NIC
 1157870:269:Jinotega, Jinotega, NIC
 1158139:264:Masaya, Masaya, NIC
-1158403:272:San Juan del Sur, Nicaragua, NIC
 1158675:267:Esteli, Estelí, NIC
 1158942:260:Boaco, Boaco, NIC
 1159202:270:Juigalpa, Chontales, NIC
@@ -4429,35 +4384,35 @@
 1191678:281:Capitol Hill, , MNP
 1191959:261:Arendal, Aust-Agder, NOR
 1192220:267:Vossavangen, Hordaland, NOR
-1192487:272:Hermansverk, Sogn og Fjordane, NOR
-1192759:258:Baerum, Akershus, NOR
+1192487:272:Leikanger, Sogn og Fjordane, NOR
+1192759:258:Bærum, Akershus, NOR
 1193017:254:Hamar, Hedmark, NOR
-1193271:262:Tonsberg, Vestfold, NOR
+1193271:262:Tønsberg, Vestfold, NOR
 1193533:257:Finnsnes, Troms, NOR
-1193790:258:Gjovik, Oppland, NOR
-1194048:264:Rorvik, Nord-Trøndelag, NOR
+1193790:258:Gjøvik, Oppland, NOR
+1194048:264:Rørvik, Nord-Trøndelag, NOR
 1194312:255:Harstad, Troms, NOR
-1194567:268:Alesund, Møre og Romsdal, NOR
+1194567:268:Ålesund, Møre og Romsdal, NOR
 1194835:259:Sandnes, Rogaland, NOR
 1195094:261:Drammen, Buskerud, NOR
 1195355:255:Moss, Ãstfold, NOR
 1195610:272:Steinkjer, Nord-Trøndelag, NOR
-1195882:260:Svolvaer, Nordland, NOR
+1195882:260:Svolvær, Nordland, NOR
 1196142:263:Mo i Rana, Nordland, NOR
 1196405:259:Narvik, Nordland, NOR
-1196664:256:Bodo, Nordland, NOR
+1196664:256:Bodø, Nordland, NOR
 1196920:264:Haugesund, Rogaland, NOR
 1197184:264:Stavanger, Rogaland, NOR
 1197448:255:Skien, Telemark, NOR
 1197703:263:Namsos, Nord-Trøndelag, NOR
 1197966:253:Alta, Finnmark, NOR
-1198219:255:Vadso, Finnmark, NOR
+1198219:255:Vadsø, Finnmark, NOR
 1198474:265:Molde, Møre og Romsdal, NOR
 1198739:265:Lillehammer, Oppland, NOR
 1199004:260:Kirkenes, Finnmark, NOR
 1199264:271:Kristiansand, Vest-Agder, NOR
 1199535:264:Hammerfest, Finnmark, NOR
-1199799:257:Tromso, Troms, NOR
+1199799:257:Tromsø, Troms, NOR
 1200056:271:Trondheim, Sør-Trøndelag, NOR
 1200327:261:Bergen, Hordaland, NOR
 1200588:250:Oslo, Oslo, NOR
@@ -4477,7 +4432,7 @@
 1204215:258:Gujrat, Punjab, PAK
 1204473:261:Sahiwal, Punjab, PAK
 1204734:261:Chiniot, Punjab, PAK
-1204995:273:Rahimyar Khan, Punjab, PAK
+1204995:273:Rahim Yar Khan, Punjab, PAK
 1205268:273:Mansehra, Khyber-Pakhtunkhwa, PAK
 1205541:259:Kohat, N.W.F.P., PAK
 1205800:271:Abbottabad, N.W.F.P., PAK
@@ -4555,7 +4510,7 @@
 1225095:284:Rabaul, East New Britain, PNG
 1225379:272:Lae, Morobe, PNG
 1225651:291:Port Moresby, Central, PNG
-1225942:304:Mariscal Jose F. Estigarribia, Boquerón, PRY
+1225942:304:Mariscal Estigarribia, Boquerón, PRY
 1226246:270:Caacupe, Cordillera, PRY
 1226516:317:General Eugenio Alejandrino Garay, Boquerón, PRY
 1226833:289:Arroyos y Esteros, Cordillera, PRY
@@ -4740,9 +4695,9 @@
 1274515:269:Bialystok, Podlachian, POL
 1274784:258:Lublin, Lublin, POL
 1275042:267:Rzeszow, Subcarpathian, POL
-1275309:254:Lodz, Lódz, POL
+1275309:254:Lódz, Lódz, POL
 1275563:261:Gdansk, Pomeranian, POL
-1275824:266:Krakow, Lesser Poland, POL
+1275824:266:Kraków, Lesser Poland, POL
 1276090:263:Warsaw, Masovian, POL
 1276353:260:Aveiro, Aveiro, PRT
 1276613:260:Leiria, Leiria, PRT
@@ -4786,7 +4741,7 @@
 1286711:271:Satu Mare, Satu Mare, ROU
 1286982:279:Rimnicu Vilcea, Vâlcea, ROU
 1287261:280:Sfintu-Gheorghe, Covasna, ROU
-1287541:281:Miercurea-Cuic, Harghita, ROU
+1287541:281:Miercurea Cuic, Harghita, ROU
 1287822:273:Piatra-Neamt, Neamt, ROU
 1288095:262:Braila, Braila, ROU
 1288357:261:Vaslui, Vaslui, ROU
@@ -4912,7 +4867,6 @@
 1320608:265:Solikamsk, Perm', RUS
 1320873:258:Kizel, Perm', RUS
 1321131:261:Pakhachi, Kamchatka, RUS
-1321392:237:Oymyakon, Sakha (Yakutia), RUS
 1321629:270:Timiryazevskiy, Tomsk, RUS
 1321899:253:Asino, Tomsk, RUS
 1322152:263:Strezhevoy, Tomsk, RUS
@@ -5174,7 +5128,7 @@
 1390180:265:Kurgan, Kurgan, RUS
 1390445:254:Indiga, Nenets, RUS
 1390699:255:Shoyna, Nenets, RUS
-1390954:274:Novyy Port, Yamal-Nenets, RUS
+1390954:274:Novy Port, Yamal-Nenets, RUS
 1391228:274:Salekhard, Yamal-Nenets, RUS
 1391502:261:Gyda, Yamal-Nenets, RUS
 1391763:273:Tazovskiy, Yamal-Nenets, RUS
@@ -5314,7 +5268,7 @@
 1427488:268:Berezniki, Perm', RUS
 1427756:270:Naltchik, Kabardin-Balkar, RUS
 1428026:270:Stavropol, Stavropol', RUS
-1428296:285:Ugolnyye Kopi, Chukchi Autonomous Okrug, RUS
+1428296:285:Ugolnye Kopi, Chukchi Autonomous Okrug, RUS
 1428581:280:Kaliningrad, Kaliningrad, RUS
 1428861:257:Pskov, Pskov, RUS
 1429118:261:Bryansk, Bryansk, RUS
@@ -5326,7 +5280,6 @@
 1430700:258:Rostov, Rostov, RUS
 1430958:259:Sochi, Krasnodar, RUS
 1431217:268:Krasnodar, Krasnodar, RUS
-1431485:244:Penza, Penza, RUS
 1431729:259:Ryazan, Ryazan', RUS
 1431988:266:Voronezh, Voronezh, RUS
 1432254:282:Magnitogorsk, Chelyabinsk, RUS
@@ -5388,7 +5341,6 @@
 1447230:268:Yakutsk, Sakha (Yakutia), RUS
 1447498:262:Tiksi, Sakha (Yakutia), RUS
 1447760:268:Magadan, Maga Buryatdan, RUS
-1448028:242:Perm, Perm', RUS
 1448270:260:Palana, Kamchatka, RUS
 1448530:302:Petropavlovsk Kamchatskiy, Kamchatka, RUS
 1448832:291:St. Petersburg, City of St. Petersburg, RUS
@@ -5479,7 +5431,7 @@
 1471613:269:Gizo, Choiseul, SLB
 1471882:267:Lata, Temotu, SLB
 1472149:280:Honiara, Guadalcanal, SLB
-1472429:259:Xuddur, Bakool, SOM
+1472429:259:Hudur, Bakool, SOM
 1472688:269:Garbahaarey, Gedo, SOM
 1472957:269:Bu'aale, Jubbada Dhexe, SOM
 1473226:275:Dhuusa Mareeb, Galguduud, SOM
@@ -5530,7 +5482,7 @@
 1485399:287:Bethlehem, Orange Free State, ZAF
 1485686:276:Springs, Gauteng, ZAF
 1485962:282:Volksrust, Mpumalanga, ZAF
-1486244:280:Nelspruit, Mpumalanga, ZAF
+1486244:280:Mbombela, Mpumalanga, ZAF
 1486524:286:Komatipoort, Mpumalanga, ZAF
 1486810:283:Middelburg, Mpumalanga, ZAF
 1487093:276:Bethal, Mpumalanga, ZAF
@@ -5591,7 +5543,7 @@
 1502609:265:Ansan, Gyeonggi-do, KOR
 1502874:264:Iksan, Jeollabuk-do, KOR
 1503138:264:Gyeongju, Daegu, KOR
-1503402:271:Masan, Gyeongsangnam-do, KOR
+1503402:271:Changwon, Gyeongsangnam-do, KOR
 1503673:259:Yeosu, Gwangju, KOR
 1503932:261:Andong, Daegu, KOR
 1504193:254:Jeju, Jeju, KOR
@@ -5637,7 +5589,7 @@
 1514773:267:Vitoria, País Vasco, ESP
 1515040:266:Almeria, Andalucía, ESP
 1515306:263:Malaga, Andalucía, ESP
-1515569:258:Jaen, Andalucía, ESP
+1515569:258:Jaén, Andalucía, ESP
 1515827:262:Huelva, Andalucía, ESP
 1516089:274:Albacete, Castilla-La Mancha, ESP
 1516363:271:Toledo, Castilla-La Mancha, ESP
@@ -5652,7 +5604,7 @@
 1518815:290:Santiago de Compostela, Galicia, ESP
 1519105:265:Badajoz, Extremadura, ESP
 1519370:264:Logrono, La Rioja, ESP
-1519634:278:San Sebastian, País Vasco, ESP
+1519634:278:San Sebastián, País Vasco, ESP
 1519912:275:Alicante, Comunidad Valenciana, ESP
 1520187:275:Castello, Comunidad Valenciana, ESP
 1520462:259:Arrecife, , ESP
@@ -5660,7 +5612,7 @@
 1520983:264:Granada, Andalucía, ESP
 1521247:269:Murcia, Región de Murcia, ESP
 1521516:252:Ceuta, Ceuta, ESP
-1521768:268:La Coruna, Galicia, ESP
+1521768:268:La Coruña, Galicia, ESP
 1522036:261:Ourense, Galicia, ESP
 1522297:284:Pamplona, Comunidad Foral de Navarra, ESP
 1522581:278:Valladolid, Castilla y León, ESP
@@ -5690,7 +5642,7 @@
 1529002:257:Kandy, Kandy, LKA
 1529259:299:Sri Jawewardenepura Kotte, Colombo, LKA
 1529558:263:Colombo, Colombo, LKA
-1529821:270:Ed Damazin, Blue Nile, SDN
+1529821:270:Ad Damazin, Blue Nile, SDN
 1530091:256:Haiya, Red Sea, SDN
 1530347:266:El Manaqil, Gezira, SDN
 1530613:265:Shendi, River Nile, SDN
@@ -5744,33 +5696,33 @@
 1543495:270:Karlskrona, Blekinge, SWE
 1543765:277:Mariestad, Västra Götaland, SWE
 1544042:281:Vannersborg, Västra Götaland, SWE
-1544323:267:Borlange, Dalarna, SWE
-1544590:276:Vasteraas, Västmanland, SWE
-1544866:269:Bollnas, Gävleborg, SWE
-1545135:264:Gavle, Gävleborg, SWE
+1544323:267:Borlänge, Dalarna, SWE
+1544590:276:Västerås, Västmanland, SWE
+1544866:269:Bollnäs, Gävleborg, SWE
+1545135:264:Gävle, Gävleborg, SWE
 1545399:260:Kalmar, Kalmar, SWE
-1545659:265:Vaxjo, Kronoberg, SWE
-1545924:259:Orebro, Orebro, SWE
-1546183:277:Norrkoping, Östergötland, SWE
+1545659:265:Växjö, Kronoberg, SWE
+1545924:259:Örebro, Orebro, SWE
+1546183:277:Norrköping, Östergötland, SWE
 1546460:265:Halmstad, Halland, SWE
 1546725:269:Karlstad, Värmland, SWE
-1546994:276:Skelleftea, Västerbotten, SWE
+1546994:276:Skellefteå, Västerbotten, SWE
 1547270:261:Visby, Gotland, SWE
-1547531:284:Trollhattan, Västra Götaland, SWE
-1547815:271:Boras, Västra Götaland, SWE
+1547531:284:Trollhättan, Västra Götaland, SWE
+1547815:271:Borås, Västra Götaland, SWE
 1548086:273:Kristianstad, Skåne, SWE
 1548359:272:Helsingborg, Skåne, SWE
-1548631:272:Jonkoping, Jönköping, SWE
-1548903:283:Ornskoldsvik, Västernorrland, SWE
-1549186:277:Linkoping, Östergötland, SWE
-1549463:269:Ostersund, Jämtland, SWE
+1548631:272:Jönköping, Jönköping, SWE
+1548903:283:Örnsköldsvik, Västernorrland, SWE
+1549186:277:Linköping, Östergötland, SWE
+1549463:269:Östersund, Jämtland, SWE
 1549732:263:Kiruna, Norrbotten, SWE
-1549995:264:Umea, Västerbotten, SWE
+1549995:264:Umeå, Västerbotten, SWE
 1550259:266:Uppsala, Uppsala, SWE
-1550525:278:Goteborg, Västra Götaland, SWE
-1550803:265:Lulea, Norrbotten, SWE
+1550525:278:Göteborg, Västra Götaland, SWE
+1550803:265:Luleå, Norrbotten, SWE
 1551068:275:Sundsvall, Västernorrland, SWE
-1551343:262:Malmo, Skåne, SWE
+1551343:262:Malmö, Skåne, SWE
 1551605:273:Stockholm, Stockholm, SWE
 1551878:264:Delemont, Jura, CHE
 1552142:272:Neuchatel, Neuchâtel, CHE
@@ -5798,7 +5750,7 @@
 1558011:267:Lausanne, Vaud, CHE
 1558278:268:Basel, Basel-Stadt, CHE
 1558546:257:Bern, Bern, CHE
-1558803:264:Zurich, Zürich, CHE
+1558803:264:Zürich, Zürich, CHE
 1559067:266:Geneva, Genève, CHE
 1559333:254:Dar'a, Dar`a, SYR
 1559587:287:Al Ladhiqiyah, Lattakia (Al Ladhiqiyah), SYR
@@ -5808,7 +5760,7 @@
 1560683:256:Idlib, Idlib, SYR
 1560939:278:Al Qamishli, Hasaka (Al Haksa), SYR
 1561217:277:Al Hasakah, Hasaka (Al Haksa), SYR
-1561494:255:Duma, Damascus, SYR
+1561494:255:Douma, Damascus, SYR
 1561749:259:Tartus, Tartus, SYR
 1562008:267:Ar Raqqah, Ar Raqqah, SYR
 1562275:253:Hamah, Hamah, SYR
@@ -6013,7 +5965,7 @@
 1615484:262:Nukualofa, , TON
 1615746:298:San Fernando, San Fernando, TTO
 1616044:303:Port-of-Spain, Port of Spain, TTO
-1616347:262:Medemine, Médenine, TUN
+1616347:262:Medenine, Médenine, TUN
 1616609:257:Kebili, Kebili, TUN
 1616866:266:Tataouine, Tataouine, TUN
 1617132:262:L'Ariana, Manubah, TUN
@@ -6022,7 +5974,7 @@
 1617923:273:Sdid Bouzid, Sidi Bou Zid, TUN
 1618196:258:Siliana, Siliana, TUN
 1618454:257:Mahdia, Mahdia, TUN
-1618711:262:Monasir, Monastir, TUN
+1618711:262:Monastir, Monastir, TUN
 1618973:263:Zaghouan, Zaghouan, TUN
 1619236:272:Ben Gardane, Médenine, TUN
 1619508:263:Zarzis, Médenine, TUN
@@ -6050,7 +6002,7 @@
 1625248:262:Giresun, Giresun, TUR
 1625510:255:Sinop, Sinop, TUR
 1625765:257:Tokat, Tokat, TUR
-1626022:260:Coruh, Artvin, TUR
+1626022:260:Artvin, Artvin, TUR
 1626282:260:Bingol, Bingöl, TUR
 1626542:259:Bitlis, Bitlis, TUR
 1626801:263:Cankiri, Çankiri, TUR
@@ -6079,7 +6031,7 @@
 1632835:268:Canakkale, Çanakkale, TUR
 1633103:260:Edirne, Edirne, TUR
 1633363:266:Tekirdag, Tekirdag, TUR
-1633629:263:Kocaeli, Kocaeli, TUR
+1633629:263:Izmit, Kocaeli, TUR
 1633892:253:Bolu, Bolu, TUR
 1634145:257:Afyon, Afyon, TUR
 1634402:263:Denizli, Denizli, TUR
@@ -6253,7 +6205,7 @@
 1678737:272:Chester, Cheshire, GBR
 1679009:269:Swansea, Swansea, GBR
 1679278:271:Carlisle, Cumbria, GBR
-1679549:285:Southend, Southend-on-Sea, GBR
+1679549:285:Southend-on-Sea, Southend-on-Sea, GBR
 1679834:274:Reading, Oxfordshire, GBR
 1680108:276:Leicester, Leicester, GBR
 1680384:281:Bradford, West Yorkshire, GBR
@@ -6392,7 +6344,7 @@
 1720100:312:Texas City, Texas, USA
 1720412:309:Pasadena, Texas, USA
 1720721:306:Baytown, Texas, USA
-1721027:315:Grand Prairie, Texas, USA
+1721027:315:Arlington, Texas, USA
 1721342:316:New London, Connecticut, USA
 1721658:316:Stamford, Connecticut, USA
 1721974:316:Waterbury, Connecticut, USA
@@ -6559,7 +6511,7 @@
 1772308:311:Arcata, California, USA
 1772619:317:Stockton, California, USA
 1772936:313:Barstow, California, USA
-1773249:322:Victoriaville, California, USA
+1773249:322:Victorville, California, USA
 1773571:316:Pasadena, California, USA
 1773887:316:Visalia, California, USA
 1774203:319:El Centro, California, USA
@@ -7134,7 +7086,7 @@
 1949134:272:Samarqand, Samarkand, UZB
 1949406:269:Tashkent, Tashkent, UZB
 1949675:268:Luganville, Sanma, VUT
-1949943:265:Port-Vila, Shefa, VUT
+1949943:265:Port Vila, Shefa, VUT
 1950208:276:Vatican City, Lazio, VAT
 1950484:272:San Carlos, Cojedes, VEN
 1950756:272:San Felipe, Yaracuy, VEN

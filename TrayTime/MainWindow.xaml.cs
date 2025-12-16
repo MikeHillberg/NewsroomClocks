@@ -50,7 +50,7 @@ public sealed partial class MainWindow : Window
     // Debug tool
     private void CreateIndexClick(object sender, RoutedEventArgs e)
     {
-        Indexer.ProcessFile();
+        Indexer.CreateIndexOfCityMap();
     }
 
 
@@ -128,7 +128,7 @@ public sealed partial class MainWindow : Window
 
         if(result == ContentDialogResult.Primary)
         {
-            Manager.Instance!.AddTimeZone(dialog.CityDetails!.TimeZoneInfo!, dialog.CityDetails.ToString());
+            Manager.Instance!.AddTimeZone(dialog.CityInfo!.TimeZoneInfo!, dialog.CityInfo.ToString());
         }
     }
 

@@ -77,6 +77,13 @@
 		<PublishTrimmed Condition="'$(Configuration)' == 'Debug'">False</PublishTrimmed>
 		<PublishTrimmed Condition="'$(Configuration)' != 'Debug'">True</PublishTrimmed>
 	</PropertyGroup>
-
-
+	
+	
+	
+	<!-- Remove DEPLOYMENTMANAGER define added by WindowsAppSDK after it's been set -->
+	<Target Name="RemoveDeploymentManagerDefine" AfterTargets="AddImplicitDefineConstants" BeforeTargets="CoreCompile">
+		<PropertyGroup>
+			<DefineConstants>$(DefineConstants.Replace('MICROSOFT_WINDOWSAPPSDK_AUTOINITIALIZE_DEPLOYMENTMANAGER;','').Replace(';MICROSOFT_WINDOWSAPPSDK_AUTOINITIALIZE_DEPLOYMENTMANAGER',''))</DefineConstants>
+		</PropertyGroup>
+	</Target>
 </Project>
