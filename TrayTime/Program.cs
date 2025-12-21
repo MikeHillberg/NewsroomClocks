@@ -9,7 +9,7 @@ using WinRT;
 
 namespace TrayTime
 {
-    public class Program
+    internal class Program
     {
         static DispatcherQueue? _dispatcherQueue;
 
@@ -32,13 +32,12 @@ namespace TrayTime
             }
 
             // Check if the app was launched by startup task
-            bool launchedByStartup = IsLaunchedBySystemStartup();
+            bool launchedBySystemStartup = IsLaunchedBySystemStartup();
 
-            // Only show and activate the window if not launched by startup
-            if (launchedByStartup)
+            // If launched automatically at startup, and there's a timezone to display,
+            // run a dispatcher pump now before creating a Window orApp
+            if (launchedBySystemStartup)
             {
-                // On auto-start we don't need the App or Window; just set and maintain the systray icons.
-                // This requires a dispatcher and timer though
                 DispatcherQueueController controller = DispatcherQueueController.CreateOnCurrentThread();
                 _dispatcherQueue = controller.DispatcherQueue;
 
@@ -46,10 +45,14 @@ namespace TrayTime
                 Manager.EnsureCreated();
 
                 // Run the initial event loop that just maintains the timer to update the systray
-                _dispatcherQueue.RunEventLoop();
+                // Skip this though if we have nothing to put into the systray
+                if (Manager.Instance!.HasTimezones)
+                {
+                    _dispatcherQueue.RunEventLoop();
+                }
 
                 // When that dispatcher returns, it means we need to open the Window
-                // So move from that Dispatcher to Xaml's
+                // So move from that Dispatcher to the one that Xaml creates in Application.Start
                 controller.ShutdownQueue();
             }
 
@@ -91,7 +94,7 @@ namespace TrayTime
         /// <summary>
         /// This function terminates the initial dispatcher in order to let the Xaml App start
         /// </summary>
-        static public void StartApp()
+        static internal void StartApp()
         {
             _dispatcherQueue.EnqueueEventLoopExit();
         }

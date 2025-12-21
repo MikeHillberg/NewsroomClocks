@@ -13,8 +13,8 @@ public class CityInfoLocation
 {
     static List<CityInfoLocation>? _cityIndices = null;
 
-    public int Offset { get; set; }
-    public int Length { get; set; }
+    internal int Offset { get; set; }
+    internal int Length { get; set; }
     public string Name { get; set; }
     public CityInfoLocation(int offset, int length, string name)
     {
@@ -36,15 +36,15 @@ public class CityInfoLocation
         //var uri = new Uri("ms-appx:///Assets/cityMap.json");
         //var file = StorageFile.GetFileFromApplicationUriAsync(uri).AsTask().Result;
         var file = await App.AssetProvider!.GetAssetAsync("cityMap.json");
-        return GetCityInfoFromFile(this, file);
+        return await GetCityInfoFromFileAsync(this, file);
     }
 
     /// <summary>
     /// Read from the city index file at the index to get the CityInfo
     /// </summary>
-    private static CityInfo GetCityInfoFromFile(CityInfoLocation cityIndex, StorageFile file)
+    async private static Task<CityInfo> GetCityInfoFromFileAsync(CityInfoLocation cityIndex, StorageFile file)
     {
-        using (Stream fs = file.OpenStreamForReadAsync().Result)
+        using (Stream fs = await file.OpenStreamForReadAsync())
         {
             fs.Seek(cityIndex.Offset, SeekOrigin.Begin);
 
@@ -65,20 +65,21 @@ public class CityInfoLocation
             // Remove trailing comma (this is in a list and we only want one record)
             json = json.Replace("},", "}");
 
-            // Deserialize string to CityInfo and return
-            var cityInfo = System.Text.Json.JsonSerializer.Deserialize<CityInfo>(json);
-            return cityInfo!;
+            // Deserialize string to CityInfo and initialize it
+            return await CityInfo.CreateFromJsonAsync(json);
         }
     }
 
-    async public static Task<List<CityInfoLocation>> GetCityIndices()
+    /// <summary>
+    /// Get all the locations in the city-index map
+    /// </summary>
+    /// <returns></returns>
+    async public static Task<List<CityInfoLocation>> GetCityInfoLocations()
     {
         if (_cityIndices == null)
         {
             _cityIndices = new();
 
-            //var uri = new Uri("ms-appx:///Assets/city-index.txt");
-            //var file = await StorageFile.GetFileFromApplicationUriAsync(uri);
             var file = await App.AssetProvider!.GetAssetAsync("CityMapIndex.txt");
 
             using (Stream fs = await file.OpenStreamForReadAsync())
@@ -107,6 +108,4 @@ public class CityInfoLocation
             parts[2]);
         return cityIndex;
     }
-
-
 }

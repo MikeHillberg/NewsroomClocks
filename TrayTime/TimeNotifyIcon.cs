@@ -2,6 +2,7 @@ using System;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
+using System.Text;
 using Drawing = System.Drawing;
 
 namespace TrayTime;
@@ -9,7 +10,7 @@ namespace TrayTime;
 /// <summary>
 /// Represents the time in a time zone as a notify icon
 /// </summary>
-public class TimeNotifyIcon : IDisposable, INotifyPropertyChanged
+internal class TimeNotifyIcon : IDisposable, INotifyPropertyChanged
 {
     private Win32NotifyIcon _notifyIcon;
     private TimeZoneInfo _timeZoneInfo;
@@ -71,7 +72,7 @@ public class TimeNotifyIcon : IDisposable, INotifyPropertyChanged
         );
     }
 
-    public void UpdateForCurrentTime()
+    internal void UpdateForCurrentTime()
     {
         // Get current time in the specified time zone
         DateTime time = TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow, _timeZoneInfo);
@@ -79,7 +80,18 @@ public class TimeNotifyIcon : IDisposable, INotifyPropertyChanged
         // Update the icon text
         bool hoursOnly = Manager.Instance!.HoursOnly;
         string timeText = hoursOnly ? time.ToString("hh") : time.ToString("h:mm");
-        _notifyIcon.Text = $"{_timeZoneInfo.StandardName}: {time:h:mm tt}";
+
+        StringBuilder tooltipText = new();
+        tooltipText.AppendLine($"{time.ToShortTimeString()} ({_timeZoneInfo.StandardName})");
+        tooltipText.AppendLine(time.ToLongDateString());
+        tooltipText.Append($"{_cityName}");
+        if(App.MainWindow == null || !App.MainWindow.Visible)
+        {
+            tooltipText.AppendLine();
+            tooltipText.Append("Tap to open settings");
+        }
+
+        _notifyIcon.Text = tooltipText.ToString();
 
         // Create a new icon of the new time
         // Dispose of the previous icon to avoid memory leak

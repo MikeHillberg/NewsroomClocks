@@ -20,6 +20,8 @@ namespace TrayTime
 {
     public sealed partial class AddTimeZoneDialog : ContentDialog, INotifyPropertyChanged
     {
+        CityInfo? _cityInfo;
+
         public AddTimeZoneDialog()
         {
             InitializeComponent();
@@ -40,7 +42,7 @@ namespace TrayTime
 
                 try
                 {
-                    var cities = await CityInfoLocation.GetCityIndices();
+                    var cities = await CityInfoLocation.GetCityInfoLocations();
                     var filteredCities = cities
                         .Where(city => city.Name.StartsWith(searchText, StringComparison.OrdinalIgnoreCase))
                         .Take(10) // Limit to 10 suggestions
@@ -64,12 +66,8 @@ namespace TrayTime
 
             var cityInfo = await location.GetCityInfoAsync();
 
-            await cityInfo.LoadTimeZoneInfoAsync();
             CityInfo = cityInfo;
-            Debug.WriteLine(cityInfo.TimeZoneInfo?.DisplayName);
         }
-
-        private CityInfo? _cityInfo;
         internal CityInfo? CityInfo
         {
             get => _cityInfo;
@@ -80,7 +78,6 @@ namespace TrayTime
                 OnPropertyChanged(nameof(IsValid));
             }
         }
-
         bool IsValid => _cityInfo != null;
 
 

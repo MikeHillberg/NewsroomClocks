@@ -2,12 +2,28 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Text.Json.Serialization;
+using System.Threading.Tasks;
 using Windows.Storage;
 
 namespace TrayTime;
 
+/// <summary>
+/// City information from cityMap.json
+/// </summary>
 public class CityInfo
 {
+    // Private constructor except to Json deserializer
+    [JsonConstructor]
+    private CityInfo() { } 
+
+    internal static async Task<CityInfo> CreateFromJsonAsync(string json)
+    {
+        var cityInfo = System.Text.Json.JsonSerializer.Deserialize<CityInfo>(json)!;
+        await cityInfo.LoadTimeZoneInfoAsync();
+        return cityInfo;
+    }
+
+    // Map Iana timezone to Windows timezone
     private static Dictionary<string, string>? _ianaToWindowsMap;
 
     [JsonPropertyName("city")]
@@ -39,9 +55,14 @@ public class CityInfo
     [JsonPropertyName("province")]
     public string Province { get; set; } = string.Empty;
 
+    // Map Json timezone property to OriginalTimezone property,
+    // and then the IanaTimezone property is a corrected version of the original
     [JsonPropertyName("timezone")]
     public string OriginalTimezone { get; set; } = string.Empty;
 
+    /// <summary>
+    /// Correct Iana timezone, corrected from OriginalTimezone property
+    /// </summary>
     public string IanaTimezone
     {
         get
@@ -53,6 +74,8 @@ public class CityInfo
             return OriginalTimezone;
         }
     }
+
+
 
     // city-map provides an Iana timezone, but not all of those time zones are in the CLDR
     // (windowsZones.xml). The Iana timezones dynamic and change, and I think
@@ -105,7 +128,6 @@ public class CityInfo
         { "Pacific/Pohnpei", "Pacific/Ponape" }  // CLDR spelling
     };
 
-
     public override string ToString()
     {
         return $"{City}, {Province}, {Iso3}";
@@ -121,7 +143,7 @@ public class CityInfo
     /// <summary>
     /// Loads the TimeZoneInfo asynchronously from app assets.
     /// </summary>
-    public async System.Threading.Tasks.Task LoadTimeZoneInfoAsync()
+    private async Task LoadTimeZoneInfoAsync()
     {
         if (_timeZoneInfo == null)
         {

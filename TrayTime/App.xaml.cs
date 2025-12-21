@@ -4,27 +4,15 @@ using Microsoft.UI.Xaml;
 
 namespace TrayTime
 {
-    public partial class App : Application, INotifyPropertyChanged
+    public partial class App : Application
     {
         static internal Window? MainWindow = null;
-
-        public event PropertyChangedEventHandler? PropertyChanged;
-
-        private void RaisePropertyChanged([CallerMemberName] string propertyName = "")
-        {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
-        }
-
-
         static App? _instance;
-        public static App Instance => _instance!;
+
+        internal static App Instance => _instance!;
 
         public static IAssetProvider? AssetProvider;
 
-        /// <summary>
-        /// Initializes the singleton application object.  This is the first line of authored code
-        /// executed, and as such is the logical equivalent of main() or WinMain().
-        /// </summary>
         public App()
         {
             _instance = this;
@@ -42,18 +30,18 @@ namespace TrayTime
             MainWindow.Activate();
         }
 
-        static public void ShowMainWindow()
+        static internal void ShowMainWindow()
         {
             if (MainWindow == null)
             {
+                // App and MainWindow haven't been created yet
                 Program.StartApp();
             }
             else
             {
+                // Unhide the window
                 MainWindow.Activate();
             }
-
         }
-
     }
 }

@@ -3,6 +3,7 @@ using Microsoft.Windows.AppLifecycle;
 using System;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.Diagnostics;
 using System.Linq;
 using System.Runtime.CompilerServices;
 using Windows.Storage;
@@ -12,22 +13,27 @@ namespace TrayTime;
 /// <summary>
 /// App logic that runs even if there's no UI
 /// </summary>
-public class Manager : INotifyPropertyChanged
+internal class Manager : INotifyPropertyChanged
 {
-    static public Manager? Instance;
+    static internal Manager? Instance;
 
     // Settings names
     private const string HoursOnlySettingKey = "HoursOnlySetting";
     private const string TimeZonesSettingKey = "SavedTimeZones";
 
     // The icons being display in the systray
-    public ObservableCollection<TimeNotifyIcon> TimeNotifyIcons => _timeNotifyIcons;
+    internal ObservableCollection<TimeNotifyIcon> TimeNotifyIcons => _timeNotifyIcons;
+    internal bool HasTimezones => _timeNotifyIcons != null && _timeNotifyIcons.Count > 0;
 
     private Microsoft.UI.Dispatching.DispatcherQueueTimer _updateIconsTimer;
     private bool _timerIntervalNeedsReset = false;
     private ObservableCollection<TimeNotifyIcon> _timeNotifyIcons = new();
     private bool _isLaunchOnStartupEnabled = false;
+    private bool _hoursOnly = false;
 
+    /// <summary>
+    /// Call private constructor and initialize static Instance property
+    /// </summary>
     internal static void EnsureCreated()
     {
         if (Instance == null)
@@ -43,7 +49,8 @@ public class Manager : INotifyPropertyChanged
         // Saved settings like what time zones and how to display
         LoadAppSetting();
 
-        // Create a dispatcher timer
+        // Create a dispatcher timer, which needs a DispatcherQueue
+        // When the App starts it will create a DispatcherQueue too, and we'll switch to taht
         var dispatcherQueue = Microsoft.UI.Dispatching.DispatcherQueue.GetForCurrentThread();
         _updateIconsTimer = dispatcherQueue.CreateTimer();
 
@@ -54,11 +61,12 @@ public class Manager : INotifyPropertyChanged
 
         // Set initial time in the notify icon to now
         UpdateTrayIcons();
-
     }
 
-    private bool _hoursOnly = false;
-    public bool HoursOnly
+    /// <summary>
+    /// If set means to only show hours, not hours:minutes
+    /// </summary>
+    internal bool HoursOnly
     {
         get => _hoursOnly;
         set
@@ -67,6 +75,7 @@ public class Manager : INotifyPropertyChanged
             {
                 _hoursOnly = value;
                 RaisePropertyChanged();
+                UpdateTrayIcons();
 
                 var localSettings = ApplicationData.Current.LocalSettings;
                 localSettings.Values[HoursOnlySettingKey] = _hoursOnly;
@@ -80,7 +89,10 @@ public class Manager : INotifyPropertyChanged
         PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
     }
 
-    public bool IsLaunchOnStartupEnabled
+    /// <summary>
+    /// If set, and a timezone has bee selected, launch app on system startup automatically
+    /// </summary>
+    internal bool IsLaunchOnStartupEnabled
     {
         get => _isLaunchOnStartupEnabled;
         set
@@ -89,12 +101,15 @@ public class Manager : INotifyPropertyChanged
             {
                 _isLaunchOnStartupEnabled = value;
                 RaisePropertyChanged();
-                UpdateStartup();
+                UpdateStartupInSystem();
             }
         }
     }
 
-    async void UpdateStartup()
+    /// <summary>
+    /// Call the Windows API to update the startup setting
+    /// </summary>
+    async void UpdateStartupInSystem()
     {
         var succeeded = await StartupManager.SetStartupEnabled(IsLaunchOnStartupEnabled);
         if (!succeeded)
@@ -106,6 +121,9 @@ public class Manager : INotifyPropertyChanged
         }
     }
 
+    /// <summary>
+    /// Load saved app settings from ApplicationDataContainer
+    /// </summary>
     private async void LoadAppSetting()
     {
         var localSettings = ApplicationData.Current.LocalSettings;
@@ -125,15 +143,20 @@ public class Manager : INotifyPropertyChanged
         RaisePropertyChanged(nameof(IsLaunchOnStartupEnabled));
     }
 
+    /// <summary>
+    /// Update notify icons on timer tick
+    /// </summary>
     private void Timer_Tick(object? sender, object e)
     {
+        Debug.WriteLine("Tick");
+        TimeSpan? newInterval = null;
+
         var now = DateTime.Now;
         if (now.Second != 0)
         {
             // Out of sync with the system clock, reset timer interval to sync with the next minute
-            _updateIconsTimer.Stop();
-            _updateIconsTimer.Interval = TimeSpan.FromSeconds(60 - now.Second);
-            _updateIconsTimer.Start();
+            //_updateIconsTimer.Interval = TimeSpan.FromSeconds(60 - now.Second);
+            newInterval = TimeSpan.FromSeconds(60 - now.Second);
             _timerIntervalNeedsReset = true;
         }
         else if (_timerIntervalNeedsReset)
@@ -141,15 +164,30 @@ public class Manager : INotifyPropertyChanged
             // In sync, but we were out of sync and set the timer to something other than 60s
             // Set it back to 60s
             _timerIntervalNeedsReset = false;
-            _updateIconsTimer.Stop();
-            _updateIconsTimer.Interval = TimeSpan.FromMinutes(1);
-            _updateIconsTimer.Start();
+            //_updateIconsTimer.Interval = TimeSpan.FromMinutes(1);
+            newInterval = TimeSpan.FromMinutes(1);
+        }
+
+        if (newInterval != null)
+        {
+            try
+            {
+                _updateIconsTimer.Stop();
+                _updateIconsTimer.Interval = newInterval.Value;
+            }
+            finally
+            {
+                _updateIconsTimer.Start();
+            }
         }
 
         // Update the icons in the sys tray, also the window if it's open
         UpdateTrayIcons();
     }
 
+    /// <summary>
+    /// Set the icons in the systray to the current time
+    /// </summary>
     private void UpdateTrayIcons()
     {
         foreach (var notifyIcon in _timeNotifyIcons)
@@ -158,14 +196,17 @@ public class Manager : INotifyPropertyChanged
         }
     }
 
-    public void SaveTimeZoneSettings()
+    /// <summary>
+    /// Save to app settings the list of time zones that have been selected
+    /// </summary>
+    internal void SaveTimeZoneSettings()
     {
         var localSettings = ApplicationData.Current.LocalSettings;
         var timeZoneList = _timeNotifyIcons
             .Select(icon => $"{icon.TimeZone.Id}:{icon.CityName}")
             .ToArray();
 
-        if (timeZoneList.Length == 0)
+        if (timeZoneList == null || timeZoneList.Length == 0)
         {
             if (localSettings.Values.ContainsKey(TimeZonesSettingKey))
             {
@@ -177,14 +218,12 @@ public class Manager : INotifyPropertyChanged
         {
             localSettings.Values[TimeZonesSettingKey] = timeZoneList;
         }
-
-        //var timeZoneIds = _timeNotifyIcons.Select(icon => icon.TimeZone.Id).ToArray();
-
-        // Save as comma-separated string
-        //localSettings.Values[TimeZonesSettingKey] = string.Join(",", timeZoneIds);
     }
 
-    public void LoadTimeZonesSettings()
+    /// <summary>
+    /// Load from app settings the list of time zones to display
+    /// </summary>
+    internal void LoadTimeZonesSettings()
     {
         var localSettings = ApplicationData.Current.LocalSettings;
 
@@ -219,21 +258,30 @@ public class Manager : INotifyPropertyChanged
         }
     }
 
-    public void AddTimeZone(TimeZoneInfo timeZone, string cityName)
+    /// <summary>
+    /// Add a time zone to display
+    /// </summary>
+    internal void AddTimeZone(TimeZoneInfo timeZone, string cityName)
     {
         _timeNotifyIcons.Add(new TimeNotifyIcon(timeZone, cityName));
         SaveTimeZoneSettings();
         UpdateTrayIcons();
     }
 
-    public void RemoveTimeZone(TimeNotifyIcon timeNotifyIcon)
+    /// <summary>
+    /// Remove one of the time zones
+    /// </summary>
+    internal void RemoveTimeZone(TimeNotifyIcon timeNotifyIcon)
     {
         _timeNotifyIcons.Remove(timeNotifyIcon);
         timeNotifyIcon.Dispose();
         SaveTimeZoneSettings();
     }
 
-    public void ExitApplication()
+    /// <summary>
+    /// When selected by the user from the context menu, exit the application
+    /// </summary>
+    internal void ExitApplication()
     {
         _updateIconsTimer?.Stop();
 

@@ -22,6 +22,7 @@
 	</ItemGroup>
 	<ItemGroup>
 	  <None Remove="AddTimeZoneDialog.xaml" />
+	  <None Remove="OptimizeDataFiles.xaml" />
 	</ItemGroup>
 
 	<ItemGroup>
@@ -59,6 +60,9 @@
 	  <None Update="Assets\windowsZones.xml">
 	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 	  </None>
+	  <Page Update="OptimizeDataFiles.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </Page>
 	</ItemGroup>
 
 	<!--
@@ -76,6 +80,7 @@
 		<PublishReadyToRun Condition="'$(Configuration)' != 'Debug'">True</PublishReadyToRun>
 		<PublishTrimmed Condition="'$(Configuration)' == 'Debug'">False</PublishTrimmed>
 		<PublishTrimmed Condition="'$(Configuration)' != 'Debug'">True</PublishTrimmed>
+		<SelfContained Condition="'$(Configuration)' != 'Debug'">True</SelfContained>
 	</PropertyGroup>
 	
 	

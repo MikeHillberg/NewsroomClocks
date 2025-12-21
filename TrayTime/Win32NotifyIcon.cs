@@ -13,7 +13,7 @@ namespace TrayTime;
 /// Win32-based notification icon implementation using Shell_NotifyIcon API.
 /// Provides similar functionality to WinForms NotifyIcon without the WinForms dependency.
 /// </summary>
-public class Win32NotifyIcon : IDisposable
+internal class Win32NotifyIcon : IDisposable
 {
     private const int WM_APP = 0x8000;
     private const int WM_TRAYICON = WM_APP + 1;
@@ -48,7 +48,7 @@ public class Win32NotifyIcon : IDisposable
         }
     }
 
-    public bool Visible
+    internal bool Visible
     {
         get => _visible;
         set
@@ -68,7 +68,7 @@ public class Win32NotifyIcon : IDisposable
         }
     }
 
-    public Drawing.Icon? Icon
+    internal Drawing.Icon? Icon
     {
         get => _icon;
         set
@@ -81,7 +81,7 @@ public class Win32NotifyIcon : IDisposable
         }
     }
 
-    public string Text
+    internal string Text
     {
         get
         {
@@ -119,7 +119,7 @@ public class Win32NotifyIcon : IDisposable
         }
     }
 
-    public void SetContextMenu(params (string text, Action action)[] menuItems)
+    internal void SetContextMenu(params (string text, Action action)[] menuItems)
     {
         // Destroy existing menu if any
         if (!_contextMenu.IsNull)
@@ -374,7 +374,7 @@ public class Win32NotifyIcon : IDisposable
     }
 }
 
-public enum MouseButton
+internal enum MouseButton
 {
     Left,
     Right

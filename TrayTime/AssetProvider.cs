@@ -12,6 +12,9 @@ public interface IAssetProvider
     Task<StorageFile> GetAssetAsync(string assetPath);
 }
 
+/// <summary>
+/// Read from the Assets folder as a StorageFile, for use in app code (not test)
+/// </summary>
 internal class AssetProvider : IAssetProvider
 {
     async public Task<StorageFile> GetAssetAsync(string assetName)
