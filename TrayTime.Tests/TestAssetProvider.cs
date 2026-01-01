@@ -7,11 +7,13 @@ namespace TrayTime.Tests;
 /// </summary>
 internal class TestAssetProvider : IAssetProvider
 {
-    async public Task<StorageFile> GetAssetAsync(string assetPath)
+    async public Task<StorageFile> GetAssetAsync(string assetFilename)
     {
-        // Location of the assets relative to where the tests run
-        var filePath = Path.Combine(Environment.CurrentDirectory,
-                                    $@"..\..\..\..\..\TrayTime\Assets\{assetPath}");
+        var productOutputDir = Environment.CurrentDirectory.Replace(
+            @"\TrayTime\TrayTime.Tests\bin",
+            @"\TrayTime\TrayTime\bin");
+
+        var filePath = Path.Combine(productOutputDir, @"Assets\", assetFilename);
 
         var file = await StorageFile.GetFileFromPathAsync(Path.GetFullPath(filePath));
         return file;

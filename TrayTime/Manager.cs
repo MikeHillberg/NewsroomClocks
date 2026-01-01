@@ -56,7 +56,9 @@ internal class Manager : INotifyPropertyChanged
 
         // Initialize the timer to one once a minute, which is when the time gets updated on the notify icon
         _updateIconsTimer.Tick += Timer_Tick;
+
         _updateIconsTimer.Interval = TimeSpan.FromMinutes(1) - TimeSpan.FromSeconds(DateTime.Now.Second);
+
         _updateIconsTimer.Start();
 
         // Set initial time in the notify icon to now
@@ -148,41 +150,55 @@ internal class Manager : INotifyPropertyChanged
     /// </summary>
     private void Timer_Tick(object? sender, object e)
     {
-        Debug.WriteLine("Tick");
+        Debug.WriteLine($"Tick {DateTime.Now}");
         TimeSpan? newInterval = null;
 
-        var now = DateTime.Now;
-        if (now.Second != 0)
+        try
         {
-            // Out of sync with the system clock, reset timer interval to sync with the next minute
-            //_updateIconsTimer.Interval = TimeSpan.FromSeconds(60 - now.Second);
-            newInterval = TimeSpan.FromSeconds(60 - now.Second);
-            _timerIntervalNeedsReset = true;
-        }
-        else if (_timerIntervalNeedsReset)
-        {
-            // In sync, but we were out of sync and set the timer to something other than 60s
-            // Set it back to 60s
-            _timerIntervalNeedsReset = false;
-            //_updateIconsTimer.Interval = TimeSpan.FromMinutes(1);
-            newInterval = TimeSpan.FromMinutes(1);
-        }
-
-        if (newInterval != null)
-        {
-            try
+            var now = DateTime.Now;
+            if (now.Second != 0)
             {
-                _updateIconsTimer.Stop();
-                _updateIconsTimer.Interval = newInterval.Value;
+                // Out of sync with the system clock, reset timer interval to sync with the next minute
+                //_updateIconsTimer.Interval = TimeSpan.FromSeconds(60 - now.Second);
+                newInterval = TimeSpan.FromSeconds(60 - now.Second);
+                _timerIntervalNeedsReset = true;
             }
-            finally
+            else if (_timerIntervalNeedsReset)
             {
+                // In sync, but we were out of sync and set the timer to something other than 60s
+                // Set it back to 60s
+                _timerIntervalNeedsReset = false;
+                newInterval = TimeSpan.FromMinutes(1);
+            }
+
+            if (newInterval != null)
+            {
+                try
+                {
+                    _updateIconsTimer.Stop();
+                    _updateIconsTimer.Interval = newInterval.Value;
+                }
+                finally
+                {
+                    _updateIconsTimer.Start();
+                }
+            }
+
+            // Update the icons in the sys tray, also the window if it's open
+            UpdateTrayIcons();
+        }
+        catch (Exception ex)
+        {
+            Debug.WriteLine($"Exception in Timer_Tick: {ex}");
+
+            // Sometimes, very infrequently, this timer stops ticking, IsRunning goes false, and can't figure out why.
+            // So adding this try/catch in case an exception is causing it
+            if (!_updateIconsTimer.IsRunning)
+            {
+                // Ensure the timer is running
                 _updateIconsTimer.Start();
             }
         }
-
-        // Update the icons in the sys tray, also the window if it's open
-        UpdateTrayIcons();
     }
 
     /// <summary>

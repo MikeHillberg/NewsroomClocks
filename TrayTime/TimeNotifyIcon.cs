@@ -2,6 +2,7 @@ using System;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
+using System.Runtime.InteropServices;
 using System.Text;
 using Drawing = System.Drawing;
 
@@ -165,7 +166,13 @@ internal class TimeNotifyIcon : IDisposable, INotifyPropertyChanged
         IntPtr hIcon = bitmap.GetHicon();
         var icon = Drawing.Icon.FromHandle(hIcon);
 
-        return icon;
+        // Create a copy of the icon that doesn't rely on the native handle
+        var clonedIcon = (Drawing.Icon)icon.Clone();
+
+        // Destroy the native icon handle to prevent GDI resource leak
+        Windows.Win32.PInvoke.DestroyIcon((Windows.Win32.UI.WindowsAndMessaging.HICON)hIcon);
+
+        return clonedIcon;
     }
 
     public void Dispose()

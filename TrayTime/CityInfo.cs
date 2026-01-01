@@ -12,19 +12,94 @@ namespace TrayTime;
 /// </summary>
 public class CityInfo
 {
+    private static Dictionary<string, string>? _ianaToWindowsMap;
+    private static Dictionary<string, string>? _zoneAliases;
+    private TimeZoneInfo? _timeZoneInfo = null;
+
+    // This is from ZoneParser.java in CLDR, and maps new names to old names,
+    // e.g. Katmandu to Kathmandu (with an "h").
+    // The CLDR windowsZones.xml use the old names
+    private static Dictionary<string, string> FIX_UNSTABLE_TZID_DATA = new()
+    {
+        {"America/Atikokan", "America/Coral_Harbour"},
+        {"America/Argentina/Buenos_Aires", "America/Buenos_Aires"},
+        {"America/Argentina/Catamarca", "America/Catamarca"},
+        {"America/Argentina/Cordoba", "America/Cordoba"},
+        {"America/Argentina/Jujuy", "America/Jujuy"},
+        {"America/Argentina/Mendoza", "America/Mendoza"},
+        {"America/Nuuk", "America/Godthab"},
+        {"America/Kentucky/Louisville", "America/Louisville"},
+        {"America/Indiana/Indianapolis", "America/Indianapolis"},
+        {"Africa/Asmara", "Africa/Asmera"},
+        {"Atlantic/Faroe", "Atlantic/Faeroe"},
+        {"Asia/Kolkata", "Asia/Calcutta"},
+        {"Asia/Ho_Chi_Minh", "Asia/Saigon"},
+        {"Asia/Yangon", "Asia/Rangoon"},
+        {"Asia/Kathmandu", "Asia/Katmandu"},
+        {"Europe/Kyiv", "Europe/Kiev"},
+        {"Pacific/Pohnpei", "Pacific/Ponape"},
+        {"Pacific/Chuuk", "Pacific/Truk"},
+
+        // This is the one exception where cityMap.json uses the new name
+        //{"Pacific/Honolulu", "Pacific/Johnston"},
+
+        {"Pacific/Kanton", "Pacific/Enderbury"}
+    };
+
+
     // Private constructor except to Json deserializer
     [JsonConstructor]
-    private CityInfo() { } 
+    private CityInfo() { }
 
     internal static async Task<CityInfo> CreateFromJsonAsync(string json)
     {
         var cityInfo = System.Text.Json.JsonSerializer.Deserialize<CityInfo>(json)!;
+
+        await cityInfo.LoadZoneAliasesAsync();
         await cityInfo.LoadTimeZoneInfoAsync();
+
         return cityInfo;
     }
 
-    // Map Iana timezone to Windows timezone
-    private static Dictionary<string, string>? _ianaToWindowsMap;
+    /// <summary>
+    /// Load the zoneAlias info from cldr\common\supplemental\supplementalMetadata.xml
+    /// </summary>
+    async Task LoadZoneAliasesAsync()
+    {
+        if (_zoneAliases != null)
+        {
+            return;
+        }
+
+        // Load zoneAlias.txt, which has info copied from 
+        // "cldr\common\supplemental\supplementalMetadata.xml",
+        // the zoneAlias info that maps old to new names. E.g. this in supplementalMetadata.xml:
+        //
+        // <zoneAlias type="Pacific/Johnston" replacement="Pacific/Honolulu" reason="deprecated"/>
+        //
+        // becomes this in zoneAlias.txt
+        //
+        // "Pacific/Johnston" : "Pacific/Honolulu"
+
+        var storageFile = await App.AssetProvider!.GetAssetAsync("zoneAliases.txt");
+        var stream = await storageFile.OpenStreamForReadAsync();
+        var textReader = new StreamReader(stream);
+
+        _zoneAliases = new Dictionary<string, string>();
+        string? line;
+        while ((line = await textReader.ReadLineAsync()) != null)
+        {
+            var parts = line.Split(':', StringSplitOptions.TrimEntries);
+            if (parts.Length == 2)
+            {
+                // Remove quotes from the strings (bugbug)
+                var key = parts[0].Trim('"');
+                var value = parts[1].Trim('"');
+                _zoneAliases[key] = value;
+            }
+        }
+    }
+
 
     [JsonPropertyName("city")]
     public string City { get; set; } = string.Empty;
@@ -67,73 +142,29 @@ public class CityInfo
     {
         get
         {
-            if (_corrections.TryGetValue(OriginalTimezone, out var corrected))
+            // Check if this is one of the corrections from CLDR's ZoneParser.java
+            if (FIX_UNSTABLE_TZID_DATA.TryGetValue(OriginalTimezone, out var corrected))
             {
                 return corrected;
             }
+
+            // Check if this is one of the replacements from CLDR's supplementalMetadata.xml
+            // Note that this actually produces an older name, but it's what windowsZones.xml uses
+            if (_zoneAliases!.TryGetValue(OriginalTimezone, out corrected))
+            {
+                return corrected;
+            }
+
+            // Otherwise use the Iana time zone code as given in cityMap.json
             return OriginalTimezone;
         }
     }
 
 
-
-    // city-map provides an Iana timezone, but not all of those time zones are in the CLDR
-    // (windowsZones.xml). The Iana timezones dynamic and change, and I think
-    // city-map is out of date in some cases. In some cases city-map seems to be
-    // correct but CLDR is missing the zone.
-    // So below are conversions from a city-map Iana timezone to a correct or
-    // compatible one in CLDR, which I'm 99% sure is correct (bugbug)
-    Dictionary<string, string> _corrections = new()
-    {
-        {"America/Argentina/Catamarca", "America/Argentina/Salta" },
-        {"America/Argentina/Mendoza", "America/Argentina/Salta" },
-        {"America/Argentina/Buenos_Aires", "America/Buenos_Aires" },
-        {"America/Argentina/Cordoba", "America/Cordoba" },
-        {"America/Argentina/Jujuy", "America/Jujuy" },
-        {"America/Yellowknife", "America/Edmonton" },
-        { "Africa/Asmara", "Africa/Nairobi" },
-        { "America/Indiana/Indianapolis", "America/Indianapolis" },
-        { "America/Montreal", "America/Toronto" },
-        { "America/Nipigon", "America/Toronto" },
-        { "America/Pangnirtung", "America/Iqaluit" },
-        { "America/Thunder_Bay", "America/Toronto" },
-        { "Asia/Chongqing", "Asia/Shanghai" },
-        { "Asia/Harbin", "Asia/Shanghai" },
-        { "Asia/Kashgar", "Asia/Urumqi" },
-
-        { "America/Atikokan", "America/Panama" },
-
-        // Mongolia
-        { "Asia/Choibalsan", "Asia/Ulaanbaatar" },
-
-        //// Nepal
-        //{ "Asia/Kathmandu", "Asia/Kathmandu" }, // canonical, maps directly to Nepal Standard Time
-
-        // Vietnam
-        { "Asia/Ho_Chi_Minh", "Asia/Bangkok" }, // For UTC+7 (no DST), CLDR uses Asia/Bangkok as the representative IANA zone.
-
-
-        // US (Louisville)
-        { "America/Kentucky/Louisville", "America/Louisville" },
-
-        // Faroe Islands
-        { "Atlantic/Faroe", "Atlantic/Faeroe" }, // CLDR spelling
-
-        // Ukraine
-        { "Europe/Kyiv", "Europe/Kiev" },        // CLDR still uses Kiev spelling
-        { "Europe/Uzhgorod", "Europe/Kiev" },
-        { "Europe/Zaporozhye", "Europe/Kiev" },
-
-        // Micronesia
-        { "Pacific/Pohnpei", "Pacific/Ponape" }  // CLDR spelling
-    };
-
     public override string ToString()
     {
         return $"{City}, {Province}, {Iso3}";
     }
-
-    TimeZoneInfo? _timeZoneInfo = null;
 
     /// <summary>
     /// Gets the TimeZoneInfo for binding purposes. Call LoadTimeZoneInfoAsync first.
@@ -180,17 +211,7 @@ public class CityInfo
                     {
                         if (!_ianaToWindowsMap.ContainsKey(ianaId))
                         {
-                            if (ianaId == "Asia/Kathmandu")
-                            {
-                                // Asia/Kathmandu is a valid Iana time, but not in windowsZones.xml
-                                // and I can't find anything equivalent, so handling it specially here
-                                // in the Iana->Windows mapping
-                                _ianaToWindowsMap[ianaId] = "Nepal Standard Time";
-                            }
-                            else
-                            {
-                                _ianaToWindowsMap[ianaId] = windowsId;
-                            }
+                            _ianaToWindowsMap[ianaId] = windowsId;
                         }
                     }
                 }

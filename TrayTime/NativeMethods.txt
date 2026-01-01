@@ -12,3 +12,4 @@ RegisterClassEx
 CreateWindowEx
 DestroyWindow
 DefWindowProc
+DestroyIcon

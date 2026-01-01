@@ -15,14 +15,12 @@
 		<DefineConstants>$(DefineConstants);DISABLE_XAML_GENERATED_MAIN</DefineConstants>
 	</PropertyGroup>
 	<ItemGroup>
-	  <Content Remove="Assets\cityMap.json" />
-	  <Content Remove="Assets\Design.png" />
-	  <Content Remove="Assets\Iana2WindowsTimeZoneID.txt" />
-	  <Content Remove="Assets\windowsZones.xml" />
+		<Content Remove="Assets\Design.png" />
+		<Content Remove="Assets\Iana2WindowsTimeZoneID.txt" />
 	</ItemGroup>
 	<ItemGroup>
-	  <None Remove="AddTimeZoneDialog.xaml" />
-	  <None Remove="OptimizeDataFiles.xaml" />
+		<None Remove="AddTimeZoneDialog.xaml" />
+		<None Remove="OptimizeDataFiles.xaml" />
 	</ItemGroup>
 
 	<ItemGroup>
@@ -39,8 +37,8 @@
 	</ItemGroup>
 	<ItemGroup>
 		<PackageReference Include="Microsoft.Windows.CsWin32" Version="0.3.259">
-		  <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
-		  <PrivateAssets>all</PrivateAssets>
+			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+			<PrivateAssets>all</PrivateAssets>
 		</PackageReference>
 		<PackageReference Include="Microsoft.Windows.SDK.BuildTools" Version="10.0.26100.7175" />
 		<PackageReference Include="Microsoft.WindowsAppSDK" Version="1.8.251106002" />
@@ -48,21 +46,28 @@
 	</ItemGroup>
 
 	<ItemGroup>
-	  <Page Update="AddTimeZoneDialog.xaml">
-	    <Generator>MSBuild:Compile</Generator>
-	  </Page>
-	  <None Update="Assets\cityMap.json">
-	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-	  </None>
-	  <None Update="Assets\Iana2WindowsTimeZoneID.txt">
-	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-	  </None>
-	  <None Update="Assets\windowsZones.xml">
-	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-	  </None>
-	  <Page Update="OptimizeDataFiles.xaml">
-	    <Generator>MSBuild:Compile</Generator>
-	  </Page>
+		<Page Update="AddTimeZoneDialog.xaml">
+			<Generator>MSBuild:Compile</Generator>
+		</Page>
+		<None Update="Assets\Iana2WindowsTimeZoneID.txt">
+			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+		</None>
+		<Page Update="OptimizeDataFiles.xaml">
+			<Generator>MSBuild:Compile</Generator>
+		</Page>
+	</ItemGroup>
+
+	<!-- Add links to data files in submodules.
+	     This makes it show up as a link in the Assets folder,
+		 and copies it into the output project -->
+	<ItemGroup>
+		<Content Include="Submodules\city-timezones\data\cityMap.json" Link="Assets\cityMap.json">
+			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+		</Content>
+		
+		<Content Include="Submodules\cldr\common\supplemental\windowsZones.xml" Link="Assets\windowsZones.xml">
+			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+		</Content>
 	</ItemGroup>
 
 	<!--
@@ -82,9 +87,9 @@
 		<PublishTrimmed Condition="'$(Configuration)' != 'Debug'">True</PublishTrimmed>
 		<SelfContained Condition="'$(Configuration)' != 'Debug'">True</SelfContained>
 	</PropertyGroup>
-	
-	
-	
+
+
+
 	<!-- Remove DEPLOYMENTMANAGER define added by WindowsAppSDK after it's been set -->
 	<Target Name="RemoveDeploymentManagerDefine" AfterTargets="AddImplicitDefineConstants" BeforeTargets="CoreCompile">
 		<PropertyGroup>

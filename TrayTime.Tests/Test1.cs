@@ -16,18 +16,15 @@ public sealed class Test1
     [TestMethod]
     public async Task TestMethod1()
     {
-        // Calculate the asset paths relative to the unit text run directory
+        // Calculate the asset paths relative to the unit test run directory,
+        // rather than try to get them from the package or output directory
 
-        var cityIndexFilePath =
-            Path.Combine(Environment.CurrentDirectory,
-                         @"..\..\..\..\..\TrayTime\Assets\CityMapIndex.txt");
-        using var cityIndexReader = new StreamReader(cityIndexFilePath);
 
-        var cityMapFilePath =
-            Path.Combine(Environment.CurrentDirectory,
-                         @"..\..\..\..\..\TrayTime\Assets\cityMap.json");
+        var cityIndexFile = await App.AssetProvider.GetAssetAsync("CityMapIndex.txt");
+        var cityIndexReader = new StreamReader(await cityIndexFile.OpenStreamForReadAsync());
 
-        var cityMapFile = await StorageFile.GetFileFromPathAsync(Path.GetFullPath(cityMapFilePath));
+
+        var cityMapFile = await App.AssetProvider.GetAssetAsync("CityMap.json");
 
         // Loop through all the indices
         string? cityIndexLine;
@@ -49,10 +46,10 @@ public sealed class Test1
                 // bugbug: have to call Load before the property works
                 timeZoneInfo = cityInfo.TimeZoneInfo;
 
-                //if (timeZoneInfo == null)
-                //{
-                //    Debug.WriteLine($"{cityInfo.IanaTimezone}");
-                //}
+                if (timeZoneInfo == null)
+                {
+                    Debug.WriteLine($"{cityInfo.IanaTimezone}");
+                }
                 Assert.IsNotNull(timeZoneInfo);
             }
             catch (Exception) { }

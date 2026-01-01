@@ -135,6 +135,58 @@ public sealed partial class OptimizeDataFiles : UserControl
         }
     }
 
+
+    /// <summary>
+    /// Pull zoneAlias elements out of CLDR supplementMetadata.xml and put
+    /// key info into zoneAliases.txt
+    /// </summary>
+    private void CompileSupplementalData(object sender, RoutedEventArgs e)
+    {
+        // This is only meant to run in development, so ready it out of the repo
+        var supplementalDataPath =
+            Path.Combine(Path.GetDirectoryName(Environment.ProcessPath!)!,
+                         @"..\..\..\..\..\Submodules\cldr\common\supplemental\supplementalMetadata.xml");
+
+        try
+        {
+            var settings = new System.Xml.XmlReaderSettings
+            {
+                DtdProcessing = System.Xml.DtdProcessing.Ignore
+            };
+            using var xmlReader = System.Xml.XmlReader.Create(supplementalDataPath, settings);
+
+            StringBuilder sb = new();
+
+            // Loop through all elements, looking for zoneAlias elements
+            while (xmlReader.Read())
+            {
+                if (xmlReader.NodeType == System.Xml.XmlNodeType.Element &&
+                    xmlReader.Name == "zoneAlias")
+                {
+                    string type = xmlReader.GetAttribute("type") ?? string.Empty;
+                    string replacement = xmlReader.GetAttribute("replacement") ?? string.Empty;
+
+                    if (!string.IsNullOrEmpty(type) && !string.IsNullOrEmpty(replacement))
+                    {
+                        sb.AppendLine($"\"{type}\" : \"{replacement}\"");
+                    }
+                }
+            }
+
+            // Write string to Assets folder
+            var outputPath = Path.Combine(
+                Path.GetDirectoryName(Environment.ProcessPath!)!,
+                @"..\..\..\..\..\Assets\zoneAliases.txt");
+
+            var writer = new StreamWriter(File.OpenWrite(outputPath));
+            writer.Write(sb.ToString());
+            writer.Flush();
+        }
+        catch (Exception ex)
+        {
+            Debug.WriteLine($"Error reading file: {ex.Message}");
+        }
+    }
     private async void CompileWindowsZones(object sender, RoutedEventArgs e)
     {
         // Get TextReader for windowsZones.xml
@@ -151,12 +203,9 @@ public sealed partial class OptimizeDataFiles : UserControl
         using var xmlReader = System.Xml.XmlReader.Create(textReader, settings);
         Dictionary<string, string> map = new();
 
-
         // Example:
         // <mapZone other = "SA Western Standard Time" territory = "001" type = "America/La_Paz" />
-        // <mapZone other = "SA Western Standard Time" territory = "AG" type = "America/Antigua" />
-        // <mapZone other = "SA Western Standard Time" territory = "AI" type = "America/Anguilla" />
-        // <mapZone other = "SA Western Standard Time" territory = "AW" type = "America/Aruba" />
+        // <mapZone other = "US Eastern Standard Time" territory = "US" type = "America/Indianapolis America/Indiana/Marengo America/Indiana/Vevay" />
 
         // Loop through all mapZone elements
         while (xmlReader.Read())
@@ -165,10 +214,14 @@ public sealed partial class OptimizeDataFiles : UserControl
                 xmlReader.Name == "mapZone")
             {
                 string other = xmlReader.GetAttribute("other") ?? string.Empty;
-                string territory = xmlReader.GetAttribute("territory") ?? string.Empty;
                 string type = xmlReader.GetAttribute("type") ?? string.Empty;
-
-                map.TryAdd(type, other);
+              
+                // The type attribute can be a space-separated list
+                var typeItems = type.Split(' ');
+                foreach (var typeItem in typeItems)
+                {
+                    map.TryAdd(typeItem, other);
+                }
             }
         }
 
