@@ -1,0 +1,10 @@
+{
+  "profiles": {
+    "NewsroomClocks (Package)": {
+      "commandName": "MsixPackage"
+    },
+    "NewsroomClocks (Unpackaged)": {
+      "commandName": "Project"
+    }
+  }
+}

@@ -1,6 +1,6 @@
-[submodule "TrayTime/Submodules/cldr"]
-	path = TrayTime/Submodules/cldr
+[submodule "NewsroomClocks/Submodules/cldr"]
+	path = NewsroomClocks/Submodules/cldr
 	url = https://github.com/unicode-org/cldr.git
-[submodule "TrayTime/Submodules/city-timezones"]
-	path = TrayTime/Submodules/city-timezones
+[submodule "NewsroomClocks/Submodules/city-timezones"]
+	path = NewsroomClocks/Submodules/city-timezones
 	url = https://github.com/kevinroberts/city-timezones.git
