@@ -1,6 +1,10 @@
+using Microsoft.UI.Input;
 using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
+using Microsoft.Windows.AppLifecycle;
 using System;
+using System.Diagnostics;
+using Windows.System;
 
 namespace NewsroomClocks;
 
@@ -13,16 +17,6 @@ public sealed partial class MainWindow : Window
         // Set the window icon
         var appWindow = this.AppWindow;
         appWindow.SetIcon("Assets\\HoursMinutesExample.ico");
-
-#if DEBUG
-        // Add the control for optimizing CityMaps and windowsZones data files
-        _root.Children.Add(
-            new OptimizeDataFiles() 
-            { 
-                HorizontalAlignment = HorizontalAlignment.Left,
-                Margin = new Thickness(0, 30, 0, 0)
-            });
-#endif
 
         // When the user closes the window, hide it instead
         appWindow.Closing += (sender, args) =>
@@ -40,7 +34,11 @@ public sealed partial class MainWindow : Window
             // Hide the window so it's no longer visible.
             sender.Hide();
         };
+
+        SetupDebug(_root, appWindow);
     }
+
+    ExtendedActivationKind ExtendedActivationKind => Program.ExtendedActivationKind;
 
     // Bind helper
     bool Not(bool b) => !b;
@@ -71,5 +69,33 @@ public sealed partial class MainWindow : Window
     {
         TimeNotifyIcon icon = ((sender as Button)!.Tag as TimeNotifyIcon)!;
         Manager.Instance!.RemoveTimeZone(icon);
+    }
+
+    /// <summary>
+    /// Set up debug code to run file generators
+    /// </summary>
+    [Conditional("DEBUG")]
+    static void SetupDebug(Panel root, Microsoft.UI.Windowing.AppWindow appWindow)
+    {
+        // Listen for Control+Shift+Alt+G to generate data files
+        root.KeyUp += (sender, args) =>
+        {
+            if (args.Key == VirtualKey.G)
+            {
+                var keyboardSource = InputKeyboardSource.GetKeyStateForCurrentThread(VirtualKey.Control);
+                var shiftState = InputKeyboardSource.GetKeyStateForCurrentThread(VirtualKey.Shift);
+                var altState = InputKeyboardSource.GetKeyStateForCurrentThread(VirtualKey.Menu);
+
+                bool isControlDown = (keyboardSource & Windows.UI.Core.CoreVirtualKeyStates.Down) == Windows.UI.Core.CoreVirtualKeyStates.Down;
+                bool isShiftDown = (shiftState & Windows.UI.Core.CoreVirtualKeyStates.Down) == Windows.UI.Core.CoreVirtualKeyStates.Down;
+                bool isAltDown = (altState & Windows.UI.Core.CoreVirtualKeyStates.Down) == Windows.UI.Core.CoreVirtualKeyStates.Down;
+
+                if (isControlDown && isShiftDown && isAltDown)
+                {
+                    // Generate the data files
+                    GenerateDataFiles.Generate();
+                }
+            }
+        };
     }
 }

@@ -7275,4 +7275,7 @@
 1999949:267:Bulawayo, Bulawayo, ZWE
 2000216:272:Copenhagen, Hovedstaden, DNK
 2000488:269:Oakleigh, Victoria, AUS
-2000757:304:Oak Park, Illinois, USA
+2000757:305:Oak Park, Illinois, USA
+2001062:300:Oxford, Mississippi, USA
+2001362:308:Starkville, Mississippi, USA
+2001670:312:College Station, Texas, USA

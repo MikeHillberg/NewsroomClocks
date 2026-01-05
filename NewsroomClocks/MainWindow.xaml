@@ -14,7 +14,7 @@
     </Window.SystemBackdrop>
 
     <ScrollViewer>
-        <Grid x:Name="_root" ColumnDefinitions="Auto,Auto" RowDefinitions="Auto,Auto,Auto,Auto"
+        <Grid x:Name="_root" ColumnDefinitions="Auto,*" RowDefinitions="Auto,Auto,Auto,Auto"
               Margin="50"
               ColumnSpacing="40"
               RowSpacing="30"
@@ -24,7 +24,7 @@
             <TextBlock Text="How To" Grid.Row="0"
                            Style="{StaticResource SubtitleTextBlockStyle}"/>
 
-            <StackPanel Grid.Row="0" Grid.Column="1" Margin="0,10,0,0">
+            <StackPanel Grid.Row="0" Grid.Column="1" Margin="0,5,0,0">
                 <TextBlock Style="{StaticResource BodyTextBlockStyle}" TextWrapping="Wrap">
                     Select one or more time zones below, and they'll show up in the flyout of your system tray clock area (notification area) like this:
                 </TextBlock>
@@ -35,7 +35,7 @@
                        HorizontalAlignment="Left"/>
 
                 <TextBlock Style="{StaticResource BodyTextBlockStyle}" 
-                           Margin="0,20,0,0"
+                           Margin="0,30,0,0"
                            TextWrapping="Wrap">
                     You can drag that out of the flyout and then it will always be visible like this:
                 </TextBlock>
@@ -46,9 +46,9 @@
                        HorizontalAlignment="Left"/>
                 
                 <TextBlock Style="{StaticResource BodyTextBlockStyle}" 
-                           Margin="0,20,0,0"
+                           Margin="0,30,0,0"
                            TextWrapping="Wrap">
-                    It's like the clocks you'd see in a newsroom back in the day:
+                    It's like the clocks you might see in a newsroom:
                 </TextBlock>
 
                 <Image Source="/Assets/Design.png" 
@@ -58,7 +58,7 @@
                        HorizontalAlignment="Left"/>
 
                 <TextBlock Style="{StaticResource BodyTextBlockStyle}" 
-                           Margin="0,20,0,0"
+                           Margin="0,30,0,0"
                            TextWrapping="Wrap">
                     Once you've picked one or more time zones, you can close this window.
                     Click on a clock to open it again.
@@ -74,7 +74,7 @@
             <StackPanel Grid.Column="1" Grid.Row="1">
                 
                 <!-- Show if no time zones picked -->
-                <TextBlock Margin="0,10,0,0" FontStyle="Italic" 
+                <TextBlock Margin="0,5,0,0" FontStyle="Italic" 
                            Style="{StaticResource BodyTextBlockStyle}"
                            Visibility="{x:Bind local:Manager.Instance.ZoneListIsEmpty}">
                     No time zone picked yet, click here to add one
@@ -122,12 +122,11 @@
                        Grid.Column="0" Grid.Row="2"
                        Style="{StaticResource SubtitleTextBlockStyle}"/>
 
-            <StackPanel Grid.Column="1" Grid.Row="2" Margin="0,10,0,0">
+            <StackPanel Grid.Column="1" Grid.Row="2" Margin="0,5,0,0">
                 <TextBlock Style="{StaticResource BodyTextBlockStyle}"
+                           TextWrapping="Wrap"
                            Margin="0,0,0,20">
                     Choose to show the time in hours:minutes format or just hours.
-                    <LineBreak/>
-                    Just hours allows the text to be larger and more readable                
                 </TextBlock>
 
                 <Grid ColumnDefinitions="Auto,Auto" RowDefinitions="Auto,Auto"
@@ -160,7 +159,7 @@
             
             <ToggleSwitch Header="Start automatically when I sign in" 
                           Grid.Column="1" Grid.Row="3"
-                          Margin="0,20,0,0"
+                          Margin="0,15,0,0"
                           IsOn="{x:Bind local:Manager.Instance.IsLaunchOnStartupEnabled, Mode=TwoWay}" />
 
             <!--</StackPanel>-->

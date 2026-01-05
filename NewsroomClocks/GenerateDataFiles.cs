@@ -1,26 +1,35 @@
-using Microsoft.UI.Xaml;
-using Microsoft.UI.Xaml.Controls;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Text;
-using Windows.ApplicationModel.DataTransfer;
-using Windows.Storage;
 
 namespace NewsroomClocks;
 
 /// <summary>
-/// (Debug only) Tools to optimize CityMap and WindowsZones data files
+/// Helper class to generate data files, like indexing CityData.json.
+/// Debug-only, not used at runtime
 /// </summary>
-public sealed partial class OptimizeDataFiles : UserControl
+static internal class GenerateDataFiles
 {
-    public OptimizeDataFiles()
+    [Conditional("DEBUG")]
+    /// <summary>
+    /// Helper to generate data files, like indexing CityData.json.
+    /// Debug-only, not used at runtime.
+    /// Run in debugger; reads/writes files in repo
+    /// </summary>
+    static internal void Generate()
     {
-        InitializeComponent();
+        CreateCityMapIndex();
+        CompileSupplementalData();
+        CompileWindowsZones();
     }
 
-    private async void CreateCityMapIndex(object sender, RoutedEventArgs e)
+    /// <summary>
+    /// Read CityMap.json and produce CityMapIndex.txt
+    /// </summary>
+    [Conditional("DEBUG")]
+    static void CreateCityMapIndex()
     {
         //{
         //    "city": "Damascus",
@@ -35,16 +44,16 @@ public sealed partial class OptimizeDataFiles : UserControl
         //    "timezone": "Asia/Damascus"
         //},
 
-        // Get cityMap.json from resources as a FileStream
-        var uri = new Uri("ms-appx:///Assets/cityMap.json");
-        var file = await StorageFile.GetFileFromApplicationUriAsync(uri);
-        if (file == null) return;
+        var cityMapJsonPath =
+            Path.Combine(Path.GetDirectoryName(Environment.ProcessPath!)!,
+                         @"..\..\..\..\..\Submodules\city-timezones\data\cityMap.json");
+
 
         try
         {
             List<(int, int, string)> index = new();
 
-            using (Stream fs = await file.OpenStreamForReadAsync())
+            using (Stream fs = File.OpenRead(cityMapJsonPath))
             using (StreamReader reader = new StreamReader(fs, Encoding.UTF8))
             {
                 int offset = 0;
@@ -123,15 +132,18 @@ public sealed partial class OptimizeDataFiles : UserControl
                     sb2.AppendLine(@$"{i.Item1}:{i.Item2}:{i.Item3}");
                 }
 
-                // bugbug: this isn't working
-                DataPackage dp = new();
-                dp.SetText(sb2.ToString());
-                Clipboard.SetContent(dp);
+                var outputPath = Path.Combine(
+                    Path.GetDirectoryName(Environment.ProcessPath!)!,
+                    @"..\..\..\..\..\Assets\cityMapIndex.txt");
+
+                var writer = new StreamWriter(File.OpenWrite(outputPath));
+                writer.Write(sb2.ToString());
+                writer.Flush();
             }
         }
         catch (Exception ex)
         {
-            Debug.WriteLine($"Error reading file: {ex.Message}");
+            Debug.WriteLine($"Error in {nameof(CreateCityMapIndex)}: {ex.Message}");
         }
     }
 
@@ -140,10 +152,10 @@ public sealed partial class OptimizeDataFiles : UserControl
     /// Pull zoneAlias elements out of CLDR supplementMetadata.xml and put
     /// key info into zoneAliases.txt
     /// </summary>
-    private void CompileSupplementalData(object sender, RoutedEventArgs e)
+    [Conditional("DEBUG")]
+    static void CompileSupplementalData()
     {
-        // This is only meant to run in development, so ready it out of the repo
-        var supplementalDataPath =
+        var supplementalMetadataPath =
             Path.Combine(Path.GetDirectoryName(Environment.ProcessPath!)!,
                          @"..\..\..\..\..\Submodules\cldr\common\supplemental\supplementalMetadata.xml");
 
@@ -153,7 +165,7 @@ public sealed partial class OptimizeDataFiles : UserControl
             {
                 DtdProcessing = System.Xml.DtdProcessing.Ignore
             };
-            using var xmlReader = System.Xml.XmlReader.Create(supplementalDataPath, settings);
+            using var xmlReader = System.Xml.XmlReader.Create(supplementalMetadataPath, settings);
 
             StringBuilder sb = new();
 
@@ -173,7 +185,6 @@ public sealed partial class OptimizeDataFiles : UserControl
                 }
             }
 
-            // Write string to Assets folder
             var outputPath = Path.Combine(
                 Path.GetDirectoryName(Environment.ProcessPath!)!,
                 @"..\..\..\..\..\Assets\zoneAliases.txt");
@@ -184,55 +195,73 @@ public sealed partial class OptimizeDataFiles : UserControl
         }
         catch (Exception ex)
         {
-            Debug.WriteLine($"Error reading file: {ex.Message}");
+            Debug.WriteLine($"Error in {nameof(CompileSupplementalData)}: {ex.Message}");
         }
     }
-    private async void CompileWindowsZones(object sender, RoutedEventArgs e)
+
+    /// <summary>
+    /// Read windowsZones.xml from CLDR and produce Iana2WindowsTimeZoneID.txt
+    /// </summary>
+    [Conditional("DEBUG")]
+    static void CompileWindowsZones()
     {
-        // Get TextReader for windowsZones.xml
-        var uri = new Uri("ms-appx:///Assets/windowsZones.xml");
-        var file = await StorageFile.GetFileFromApplicationUriAsync(uri);
-        var stream = await file.OpenStreamForReadAsync();
-        var textReader = new StreamReader(stream);
-
-        // Create XmlReader with settings to ignore DTD
-        var settings = new System.Xml.XmlReaderSettings
+        try
         {
-            DtdProcessing = System.Xml.DtdProcessing.Ignore
-        };
-        using var xmlReader = System.Xml.XmlReader.Create(textReader, settings);
-        Dictionary<string, string> map = new();
+            // This is only meant to run in development, so ready it out of the repo
+            var windowsZonesPath =
+                Path.Combine(Path.GetDirectoryName(Environment.ProcessPath!)!,
+                             @"..\..\..\..\..\Submodules\cldr\common\supplemental\windowsZones.xml");
+            var file = File.OpenRead(windowsZonesPath);
+            var textReader = new StreamReader(file);
 
-        // Example:
-        // <mapZone other = "SA Western Standard Time" territory = "001" type = "America/La_Paz" />
-        // <mapZone other = "US Eastern Standard Time" territory = "US" type = "America/Indianapolis America/Indiana/Marengo America/Indiana/Vevay" />
-
-        // Loop through all mapZone elements
-        while (xmlReader.Read())
-        {
-            if (xmlReader.NodeType == System.Xml.XmlNodeType.Element &&
-                xmlReader.Name == "mapZone")
+            // Create XmlReader with settings to ignore DTD
+            var settings = new System.Xml.XmlReaderSettings
             {
-                string other = xmlReader.GetAttribute("other") ?? string.Empty;
-                string type = xmlReader.GetAttribute("type") ?? string.Empty;
-              
-                // The type attribute can be a space-separated list
-                var typeItems = type.Split(' ');
-                foreach (var typeItem in typeItems)
+                DtdProcessing = System.Xml.DtdProcessing.Ignore
+            };
+            using var xmlReader = System.Xml.XmlReader.Create(textReader, settings);
+            Dictionary<string, string> map = new();
+
+            // Example:
+            // <mapZone other = "SA Western Standard Time" territory = "001" type = "America/La_Paz" />
+            // <mapZone other = "US Eastern Standard Time" territory = "US" type = "America/Indianapolis America/Indiana/Marengo America/Indiana/Vevay" />
+
+            // Loop through all mapZone elements
+            while (xmlReader.Read())
+            {
+                if (xmlReader.NodeType == System.Xml.XmlNodeType.Element &&
+                    xmlReader.Name == "mapZone")
                 {
-                    map.TryAdd(typeItem, other);
+                    string other = xmlReader.GetAttribute("other") ?? string.Empty;
+                    string type = xmlReader.GetAttribute("type") ?? string.Empty;
+
+                    // The type attribute can be a space-separated list
+                    var typeItems = type.Split(' ');
+                    foreach (var typeItem in typeItems)
+                    {
+                        map.TryAdd(typeItem, other);
+                    }
                 }
             }
-        }
 
-        StringBuilder sb = new();
-        foreach (var kvp in map)
+            StringBuilder sb = new();
+            foreach (var kvp in map)
+            {
+                sb.AppendLine($"{kvp.Key} : {kvp.Value}");
+            }
+
+            var outputPath = Path.Combine(
+                Path.GetDirectoryName(Environment.ProcessPath!)!,
+                @"..\..\..\..\..\Assets\Iana2WindowsTimeZoneID.txt");
+
+            var writer = new StreamWriter(File.OpenWrite(outputPath));
+            writer.Write(sb.ToString());
+            writer.Flush();
+        }
+        catch (Exception ex)
         {
-            sb.AppendLine($"{kvp.Key} : {kvp.Value}");
+            Debug.WriteLine($"Error in {nameof(CreateCityMapIndex)}: {ex.Message}");
         }
-
-        // TODO: Use WinUI clipboard instead
-        // System.Windows.Forms.Clipboard.SetText(sb.ToString());
     }
 
 
@@ -240,5 +269,4 @@ public sealed partial class OptimizeDataFiles : UserControl
     {
         return line.Split(':')[1].Trim().Trim(',', '"');
     }
-
 }

@@ -6,7 +6,7 @@
 		<RootNamespace>NewsroomClocks</RootNamespace>
 		<ApplicationManifest>app.manifest</ApplicationManifest>
 		<Platforms>x86;x64;ARM64</Platforms>
-		<RuntimeIdentifiers>win-x86;win-x64;win-arm64</RuntimeIdentifiers>
+		<RuntimeIdentifiers Condition="'$(RuntimeIdentifier)' == ''">win-x86;win-x64;win-arm64</RuntimeIdentifiers>
 		<!--<PublishProfile>win-$(Platform).pubxml</PublishProfile>-->
 		<UseWinUI>true</UseWinUI>
 		<EnableMsixTooling>true</EnableMsixTooling>
@@ -20,7 +20,6 @@
 	</ItemGroup>
 	<ItemGroup>
 		<None Remove="AddTimeZoneDialog.xaml" />
-		<None Remove="OptimizeDataFiles.xaml" />
 	</ItemGroup>
 
 	<ItemGroup>
@@ -55,9 +54,6 @@
 		<None Update="Assets\Iana2WindowsTimeZoneID.txt">
 			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 		</None>
-		<Page Update="OptimizeDataFiles.xaml">
-			<Generator>MSBuild:Compile</Generator>
-		</Page>
 	</ItemGroup>
 
 	<!-- Add links to data files in submodules.
@@ -73,10 +69,16 @@
 		</Content>
 	</ItemGroup>
 	<ItemGroup>
+	  <Content Update="Assets\CityMapIndex.txt">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </Content>
 	  <Content Update="Assets\InFlyout.png">
 	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 	  </Content>
 	  <Content Update="Assets\InSysTray.png">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </Content>
+	  <Content Update="Assets\zoneAliases.txt">
 	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 	  </Content>
 	</ItemGroup>
@@ -97,6 +99,14 @@
 		<PublishTrimmed Condition="'$(Configuration)' == 'Debug'">False</PublishTrimmed>
 		<PublishTrimmed Condition="'$(Configuration)' != 'Debug'">True</PublishTrimmed>
 		<SelfContained Condition="'$(Configuration)' != 'Debug'">True</SelfContained>
+		<GenerateAppInstallerFile>False</GenerateAppInstallerFile>
+		<AppxPackageSigningEnabled>False</AppxPackageSigningEnabled>
+		<AppxPackageSigningTimestampDigestAlgorithm>SHA256</AppxPackageSigningTimestampDigestAlgorithm>
+		<AppxAutoIncrementPackageRevision>True</AppxAutoIncrementPackageRevision>
+		<GenerateTestArtifacts>True</GenerateTestArtifacts>
+		<AppxBundle>Never</AppxBundle>
+		<GenerateTemporaryStoreCertificate>True</GenerateTemporaryStoreCertificate>
+		<HoursBetweenUpdateChecks>0</HoursBetweenUpdateChecks>
 	</PropertyGroup>
 
 

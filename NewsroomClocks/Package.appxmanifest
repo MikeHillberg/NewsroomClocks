@@ -9,15 +9,15 @@
   IgnorableNamespaces="uap rescap desktop">
 
   <Identity
-    Name="CoffeeZeit.NewsroomClocks"
-    Publisher="CN=mikehill"
-    Version="1.0.0.0" />
+    Name="2775CoffeeZeit.6098777AE3842"
+    Publisher="CN=1BD61FE2-F217-4D46-9A05-EE02A424756D"
+    Version="1.0.1.0" />
 
-  <mp:PhoneIdentity PhoneProductId="63be57a4-17af-4256-b0a1-3bea07326225" PhonePublisherId="00000000-0000-0000-0000-000000000000"/>
+  <mp:PhoneIdentity PhoneProductId="33c3f408-8c00-4b1e-8418-53070e21458a" PhonePublisherId="00000000-0000-0000-0000-000000000000"/>
 
   <Properties>
-    <DisplayName>NewsroomClocks</DisplayName>
-    <PublisherDisplayName>mikehill</PublisherDisplayName>
+    <DisplayName>Newsroom Clocks</DisplayName>
+    <PublisherDisplayName>CoffeeZeit</PublisherDisplayName>
     <Logo>Assets\StoreLogo.png</Logo>
   </Properties>
 
@@ -35,7 +35,7 @@
       Executable="$targetnametoken$.exe"
       EntryPoint="$targetentrypoint$">
       <uap:VisualElements
-        DisplayName="NewsroomClocks"
+        DisplayName="Newsroom Clocks"
         Description="NewsroomClocks"
         BackgroundColor="transparent"
         Square150x150Logo="Assets\Square150x150Logo.png"

@@ -4,6 +4,7 @@ AppendMenu
 TrackPopupMenuEx
 DestroyMenu
 SetForegroundWindow
+ShowWindow
 PostMessage
 GetCursorPos
 DestroyIcon

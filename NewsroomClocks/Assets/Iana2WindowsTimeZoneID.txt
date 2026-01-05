@@ -1,4 +1,4 @@
-﻿Etc/GMT+12 : Dateline Standard Time
+Etc/GMT+12 : Dateline Standard Time
 Etc/GMT+11 : UTC-11
 Pacific/Pago_Pago : UTC-11
 Pacific/Niue : UTC-11

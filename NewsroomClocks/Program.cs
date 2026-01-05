@@ -97,28 +97,38 @@ namespace NewsroomClocks
             _dispatcherQueue?.EnqueueEventLoopExit();
         }
 
+        internal static ExtendedActivationKind ExtendedActivationKind;
+
         private static bool DecideRedirection()
         {
             bool isRedirect = false;
 
             // Find out what kind of activation this is
-            Microsoft.Windows.AppLifecycle.AppActivationArguments args =
-                Microsoft.Windows.AppLifecycle.AppInstance.GetCurrent().GetActivatedEventArgs();
-            Microsoft.Windows.AppLifecycle.ExtendedActivationKind kind = args.Kind;
+            AppActivationArguments args = AppInstance.GetCurrent().GetActivatedEventArgs();
+            ExtendedActivationKind kind = args.Kind;
+            ExtendedActivationKind = kind;
 
             try
             {
-                // If this is a launch activation, check if we should redirect
-                if (kind == Microsoft.Windows.AppLifecycle.ExtendedActivationKind.Launch)
+                // If this is a launch activation, or an automatic restart (after a reboot),
+                // either register as the first instance or redirect to it
+                if (kind == ExtendedActivationKind.Launch
+                    || kind == ExtendedActivationKind.StartupTask)
                 {
                     // Try to get the main instance (first instance)
-                    var mainInstance = Microsoft.Windows.AppLifecycle.AppInstance.FindOrRegisterForKey("main");
+                    var mainInstance = AppInstance.FindOrRegisterForKey("main");
 
                     // If this isn't the main instance, redirect to it
                     if (!mainInstance.IsCurrent)
                     {
                         isRedirect = true;
                         mainInstance.RedirectActivationToAsync(args).AsTask().Wait();
+                    }
+                    else
+                    {
+                        // This is the main instance, subscribe to activation events
+                        // so that we can activate the window on redirection
+                        mainInstance.Activated += OnActivated;
                     }
                 }
             }
@@ -129,6 +139,15 @@ namespace NewsroomClocks
             }
 
             return isRedirect;
+        }
+
+        private static void OnActivated(object? sender, AppActivationArguments args)
+        {
+            // When another instance redirects to this main instance, show the window
+            if (args.Kind == ExtendedActivationKind.Launch)
+            {
+                App.ShowMainWindow();
+            }
         }
     }
 }
