@@ -1,4 +1,4 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
 	<PropertyGroup>
 		<OutputType>WinExe</OutputType>
 		<TargetFramework>net8.0-windows10.0.19041.0</TargetFramework>
@@ -6,13 +6,29 @@
 		<RootNamespace>NewsroomClocks</RootNamespace>
 		<ApplicationManifest>app.manifest</ApplicationManifest>
 		<Platforms>x86;x64;ARM64</Platforms>
-		<RuntimeIdentifiers Condition="'$(RuntimeIdentifier)' == ''">win-x86;win-x64;win-arm64</RuntimeIdentifiers>
+		<RuntimeIdentifiers>win-x86;win-x64;win-arm64</RuntimeIdentifiers>
 		<!--<PublishProfile>win-$(Platform).pubxml</PublishProfile>-->
 		<UseWinUI>true</UseWinUI>
 		<EnableMsixTooling>true</EnableMsixTooling>
 		<Nullable>enable</Nullable>
 		<AllowUnsafeBlocks>true</AllowUnsafeBlocks>
 		<DefineConstants>$(DefineConstants);DISABLE_XAML_GENERATED_MAIN</DefineConstants>
+	</PropertyGroup>
+
+	<!-- Set RuntimeIdentifier based on Platform for MSIX packaging -->
+	<PropertyGroup Condition="'$(Platform)' == 'x86'">
+		<RuntimeIdentifier>win-x86</RuntimeIdentifier>
+	</PropertyGroup>
+	<PropertyGroup Condition="'$(Platform)' == 'x64'">
+		<RuntimeIdentifier>win-x64</RuntimeIdentifier>
+	</PropertyGroup>
+	<PropertyGroup Condition="'$(Platform)' == 'ARM64'">
+		<RuntimeIdentifier>win-arm64</RuntimeIdentifier>
+	</PropertyGroup>
+	
+	<!-- Default RuntimeIdentifier if Platform is not set (e.g., during restore) -->
+	<PropertyGroup Condition="'$(RuntimeIdentifier)' == '' And '$(Platform)' == ''">
+		<RuntimeIdentifier>win-x64</RuntimeIdentifier>
 	</PropertyGroup>
 	<ItemGroup>
 		<Content Remove="Assets\Design.png" />
