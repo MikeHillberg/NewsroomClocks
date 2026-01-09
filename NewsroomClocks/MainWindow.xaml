@@ -60,6 +60,12 @@
                 <TextBlock Style="{StaticResource BodyTextBlockStyle}" 
                            Margin="0,30,0,0"
                            TextWrapping="Wrap">
+                    Clocks are light during the daytime hours (<Run Text="{x:Bind DaytimeRange}"/>), and dark at nighttime
+                </TextBlock>
+
+                <TextBlock Style="{StaticResource BodyTextBlockStyle}" 
+                           Margin="0,10,0,0"
+                           TextWrapping="Wrap">
                     Once you've picked one or more time zones, you can close this window.
                     Click on a clock to open it again.
                     Right click on a clock and choose exit to close the app.
@@ -157,7 +163,7 @@
                        Style="{StaticResource SubtitleTextBlockStyle}"/>
 
             
-            <ToggleSwitch Header="Start automatically when I sign in" 
+            <ToggleSwitch Header="Start automatically when you sign in" 
                           Grid.Column="1" Grid.Row="3"
                           Margin="0,15,0,0"
                           IsOn="{x:Bind local:Manager.Instance.IsLaunchOnStartupEnabled, Mode=TwoWay}" />

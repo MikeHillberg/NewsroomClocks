@@ -38,7 +38,15 @@ public sealed partial class MainWindow : Window
         SetupDebug(_root, appWindow);
     }
 
-    ExtendedActivationKind ExtendedActivationKind => Program.ExtendedActivationKind;
+    string DaytimeRange
+    {
+        get
+        {
+            var daytimeStart = new DateTime(1, 1, 1, 6, 0, 0);
+            var daytimeEnd = new DateTime(1, 1, 1, 18, 0, 0);
+            return $"{daytimeStart.ToString("t")} - {daytimeEnd.ToString("t")}";
+        }
+    }
 
     // Bind helper
     bool Not(bool b) => !b;
