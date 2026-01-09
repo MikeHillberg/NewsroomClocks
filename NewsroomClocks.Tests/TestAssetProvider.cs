@@ -13,7 +13,7 @@ internal class TestAssetProvider : IAssetProvider
             @"\NewsroomClocks\NewsroomClocks.Tests\bin",
             @"\NewsroomClocks\NewsroomClocks\bin");
 
-        var filePath = Path.Combine(productOutputDir, @"Assets\", assetFilename);
+        var filePath = Path.Combine(productOutputDir, @"win-x64\Assets\", assetFilename);
 
         var file = await StorageFile.GetFileFromPathAsync(Path.GetFullPath(filePath));
         return file;
