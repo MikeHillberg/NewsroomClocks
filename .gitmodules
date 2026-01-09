@@ -1,0 +1,6 @@
+[submodule "NewsroomClocks/Submodules/cldr"]
+	path = NewsroomClocks/Submodules/cldr
+	url = https://github.com/unicode-org/cldr.git
+[submodule "NewsroomClocks/Submodules/city-timezones"]
+	path = NewsroomClocks/Submodules/city-timezones
+	url = https://github.com/kevinroberts/city-timezones.git

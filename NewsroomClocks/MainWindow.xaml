@@ -1,0 +1,174 @@
+<Window
+    x:Class="NewsroomClocks.MainWindow"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:NewsroomClocks"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" xmlns:system="using:System"
+    mc:Ignorable="d"
+    x:DefaultBindMode="OneWay"
+    Title="Newsroom Clocks">
+
+    <Window.SystemBackdrop>
+        <MicaBackdrop />
+    </Window.SystemBackdrop>
+
+    <ScrollViewer>
+        <Grid x:Name="_root" ColumnDefinitions="Auto,*" RowDefinitions="Auto,Auto,Auto,Auto"
+              Margin="50"
+              ColumnSpacing="40"
+              RowSpacing="30"
+              Padding="60"
+              Background="{ThemeResource SystemControlBackgroundAltHighBrush}">
+
+            <TextBlock Text="How To" Grid.Row="0"
+                           Style="{StaticResource SubtitleTextBlockStyle}"/>
+
+            <StackPanel Grid.Row="0" Grid.Column="1" Margin="0,5,0,0">
+                <TextBlock Style="{StaticResource BodyTextBlockStyle}" TextWrapping="Wrap">
+                    Select one or more time zones below, and they'll show up in the flyout of your system tray clock area (notification area) like this:
+                </TextBlock>
+
+                <Image Source="/Assets/InFlyout.png" 
+                       Margin="50,0,0,0"
+                       Height="140"
+                       HorizontalAlignment="Left"/>
+
+                <TextBlock Style="{StaticResource BodyTextBlockStyle}" 
+                           Margin="0,30,0,0"
+                           TextWrapping="Wrap">
+                    You can drag that out of the flyout and then it will always be visible like this:
+                </TextBlock>
+
+                <Image Source="/Assets/InSysTray.png"  
+                       Margin="50,10,0,0"
+                       Height="60"
+                       HorizontalAlignment="Left"/>
+                
+                <TextBlock Style="{StaticResource BodyTextBlockStyle}" 
+                           Margin="0,30,0,0"
+                           TextWrapping="Wrap">
+                    It's like the clocks you might see in a newsroom:
+                </TextBlock>
+
+                <Image Source="/Assets/Design.png" 
+                       Margin="50,10,0,0"
+                       Height="120"
+                       Stretch="Uniform"
+                       HorizontalAlignment="Left"/>
+
+                <TextBlock Style="{StaticResource BodyTextBlockStyle}" 
+                           Margin="0,30,0,0"
+                           TextWrapping="Wrap">
+                    Clocks are light during the daytime hours (<Run Text="{x:Bind DaytimeRange}"/>), and dark at nighttime
+                </TextBlock>
+
+                <TextBlock Style="{StaticResource BodyTextBlockStyle}" 
+                           Margin="0,10,0,0"
+                           TextWrapping="Wrap">
+                    Once you've picked one or more time zones, you can close this window.
+                    Click on a clock to open it again.
+                    Right click on a clock and choose exit to close the app.
+                </TextBlock>
+
+            </StackPanel>
+
+            <TextBlock Text="Time Zone(s)" 
+                       Grid.Column="0" Grid.Row="1"
+                       Style="{StaticResource SubtitleTextBlockStyle}"/>
+
+            <StackPanel Grid.Column="1" Grid.Row="1">
+                
+                <!-- Show if no time zones picked -->
+                <TextBlock Margin="0,5,0,0" FontStyle="Italic" 
+                           Style="{StaticResource BodyTextBlockStyle}"
+                           Visibility="{x:Bind local:Manager.Instance.ZoneListIsEmpty}">
+                    No time zone picked yet, click here to add one
+                </TextBlock>
+                
+                
+                <!-- List of time zones already picked -->
+                <ItemsControl ItemsSource="{x:Bind local:Manager.Instance.TimeNotifyIcons}">
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate x:DataType="local:TimeNotifyIcon">
+                            <Grid ColumnDefinitions="Auto,*" ColumnSpacing="10" RowDefinitions="Auto,Auto"
+                                  Margin="0,0,0,10">
+
+                                <!-- Column 1: time zone -->
+                                <StackPanel Margin="13,10,0,0" Grid.Row="0">
+                                    <TextBlock Text="{x:Bind CityName}"
+                                               FontWeight="Bold"
+                                               Style="{StaticResource BodyTextBlockStyle}"/>
+                                    <TextBlock Text="{x:Bind CurrentTime}"
+                                               Style="{StaticResource BodyTextBlockStyle}"/>
+                                </StackPanel>
+
+                                <!-- Column 2: delete button -->
+                                <Button Grid.Column="1" Click="DeleteTimeZone" Tag="{Binding}">
+                                    <FontIcon Glyph="&#xE74D;" FontSize="17"/>
+                                </Button>
+                            </Grid>
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                </ItemsControl>
+
+                <StackPanel Orientation="Horizontal" Spacing="20" Margin="0,10,0,0">
+                    <Button Click="AddTimeZoneClick2">
+                        <FontIcon Glyph="&#xE710;" FontSize="17"/>
+                    </Button>
+
+                    <TextBlock VerticalAlignment="Center"
+                               Style="{StaticResource BaseTextBlockStyle}"
+                               FontStyle="Italic"
+                               Text="Add Time Zone" />
+                </StackPanel>
+            </StackPanel>
+
+            <TextBlock Text="Time Format" 
+                       Grid.Column="0" Grid.Row="2"
+                       Style="{StaticResource SubtitleTextBlockStyle}"/>
+
+            <StackPanel Grid.Column="1" Grid.Row="2" Margin="0,5,0,0">
+                <TextBlock Style="{StaticResource BodyTextBlockStyle}"
+                           TextWrapping="Wrap"
+                           Margin="0,0,0,20">
+                    Choose to show the time in hours:minutes format or just hours.
+                </TextBlock>
+
+                <Grid ColumnDefinitions="Auto,Auto" RowDefinitions="Auto,Auto"
+                      ColumnSpacing="20"
+                      RowSpacing="10">
+
+                    <RadioButton Grid.Row="0" Grid.Column="0" 
+                                 IsChecked="{x:Bind Not(local:Manager.Instance.HoursOnly)}">Hour : Minute</RadioButton>
+                    <Image Grid.Row="1" Grid.Column="0" 
+                           Width="80"
+                           HorizontalAlignment="Left"
+                           Source="/Assets/HoursMinutesExample.png" />
+
+                    <RadioButton Grid.Row="0" Grid.Column="1" 
+                                 IsChecked="{x:Bind local:Manager.Instance.HoursOnly, Mode=TwoWay}">Hour</RadioButton>
+
+                    <Image Grid.Row="1" Grid.Column="1" 
+                           Width="80"
+                           HorizontalAlignment="Left"
+                           Source="/Assets/HoursExample.png" />
+
+                </Grid>
+            </StackPanel>
+
+            <TextBlock Text="Startup" 
+                       Margin="0,10,0,0"
+                       Grid.Column="0" Grid.Row="3"
+                       Style="{StaticResource SubtitleTextBlockStyle}"/>
+
+            
+            <ToggleSwitch Header="Start automatically when you sign in" 
+                          Grid.Column="1" Grid.Row="3"
+                          Margin="0,15,0,0"
+                          IsOn="{x:Bind local:Manager.Instance.IsLaunchOnStartupEnabled, Mode=TwoWay}" />
+
+            <!--</StackPanel>-->
+        </Grid>
+    </ScrollViewer>
+</Window>
