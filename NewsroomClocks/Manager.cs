@@ -41,6 +41,10 @@ internal class Manager : INotifyPropertyChanged
         {
             _ = new Manager(); // static Instance set in constructor
         }
+
+        // Even if this is the second call to EnsureCreated,
+        // we need to re-create the timer because we have a new DispatcherQueue
+        Instance!.SetupTimer();
     }
 
     private Manager()
@@ -49,6 +53,25 @@ internal class Manager : INotifyPropertyChanged
 
         // Saved settings like what time zones and how to display
         LoadAppSetting();
+
+        // Set initial time in the notify icon to now
+        UpdateTrayIcons();
+    }
+
+    /// <summary>
+    /// Set up the timer that will update the icons once a minute.
+    /// This is called for each dispatcher
+    /// </summary>
+    internal void SetupTimer()
+    {
+        if(_updateIconsTimer != null)
+        {
+            // We're starting up the new DispatcherQueue,
+            // the old DispatcherTimer won't work anymore
+            _updateIconsTimer.Stop();
+            _updateIconsTimer.Tick -= Timer_Tick;
+            _updateIconsTimer = null!;
+        }
 
         // Create a dispatcher timer, which needs a DispatcherQueue
         // When the App starts it will create a DispatcherQueue too, and we'll switch to taht
@@ -63,9 +86,6 @@ internal class Manager : INotifyPropertyChanged
         _updateIconsTimer.Interval = TimeSpan.FromMinutes(1) - TimeSpan.FromSeconds(DateTime.Now.Second);
 
         _updateIconsTimer.Start();
-
-        // Set initial time in the notify icon to now
-        UpdateTrayIcons();
     }
 
     /// <summary>

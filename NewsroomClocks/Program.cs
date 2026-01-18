@@ -30,7 +30,7 @@ namespace NewsroomClocks
             }
 
             // Check if the app was launched by startup task
-            bool launchedBySystemStartup = IsLaunchedBySystemStartup();
+            bool launchedBySystemStartup = IsLaunchedBySystemStartup(args);
 
             // If launched automatically at startup, and there's a timezone to display,
             // run a dispatcher pump now before creating a Window orApp
@@ -70,24 +70,38 @@ namespace NewsroomClocks
         /// <summary>
         /// Checks if the application was launched automatically on boot
         /// </summary>
-        static private bool IsLaunchedBySystemStartup()
+        static private bool IsLaunchedBySystemStartup(string[] commandLineArgs)
         {
             try
             {
                 var activatedArgs = AppInstance.GetCurrent().GetActivatedEventArgs();
                 if (activatedArgs != null)
                 {
-                    return activatedArgs.Kind == ExtendedActivationKind.StartupTask;
+                    if (activatedArgs.Kind == ExtendedActivationKind.StartupTask)
+                    {
+                        return true;
+                    }
                 }
             }
             catch (Exception)
             {
-                // If we can't determine, default to false (show window)
+                // If we can't determine, fall through to check command-line args
+            }
+
+            // Check for command-line argument
+            if (commandLineArgs != null && commandLineArgs.Length > 0)
+            {
+                foreach (var arg in commandLineArgs)
+                {
+                    if (arg == "--systemStartup")
+                    {
+                        return true;
+                    }
+                }
             }
 
             return false;
         }
-
 
         /// <summary>
         /// This function terminates the initial dispatcher in order to let the Xaml App start
