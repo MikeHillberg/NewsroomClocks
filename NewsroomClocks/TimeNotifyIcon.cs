@@ -81,7 +81,13 @@ internal class TimeNotifyIcon : IDisposable, INotifyPropertyChanged
 
         // Update the icon text
         bool hoursOnly = Manager.Instance!.HoursOnly;
-        string timeText = hoursOnly ? time.ToString("hh") : time.ToString("h:mm");
+        
+        // Get the time in user's preference of 12 or 24 hour format for the tooltip
+        bool use24Hour = !System.Globalization.CultureInfo.CurrentCulture.DateTimeFormat.ShortTimePattern.Contains("t");
+        
+        string timeText = hoursOnly 
+            ? time.ToString(use24Hour ? "HH" : "hh") 
+            : time.ToString(use24Hour ? "H:mm" : "h:mm");
 
         StringBuilder tooltipText = new();
         tooltipText.AppendLine($"{time.ToShortTimeString()} ({_timeZoneInfo.StandardName})");
@@ -127,13 +133,14 @@ internal class TimeNotifyIcon : IDisposable, INotifyPropertyChanged
         if (hoursOnly)
         {
             // Display only the hour, centered
-            using var font = new Drawing.Font("Segoe UI", 17, Drawing.FontStyle.Bold, Drawing.GraphicsUnit.Pixel);
+            using var font = new Drawing.Font("Segoe UI", 20, Drawing.FontStyle.Bold, Drawing.GraphicsUnit.Pixel);
             using var textBrush = new Drawing.SolidBrush(textColor);
 
             var stringFormat = new Drawing.StringFormat
             {
                 Alignment = Drawing.StringAlignment.Center,
-                LineAlignment = Drawing.StringAlignment.Center
+                LineAlignment = Drawing.StringAlignment.Center,
+                FormatFlags = Drawing.StringFormatFlags.NoWrap
             };
 
             // Draw hour centered in the icon
@@ -153,7 +160,8 @@ internal class TimeNotifyIcon : IDisposable, INotifyPropertyChanged
             var stringFormat = new Drawing.StringFormat
             {
                 Alignment = Drawing.StringAlignment.Center,
-                LineAlignment = Drawing.StringAlignment.Center
+                LineAlignment = Drawing.StringAlignment.Center,
+                FormatFlags = Drawing.StringFormatFlags.NoWrap
             };
 
             // Draw hour on top half
