@@ -84,9 +84,9 @@ internal class TimeNotifyIcon : IDisposable, INotifyPropertyChanged
         
         // Get the time in user's preference of 12 or 24 hour format for the tooltip
         bool use24Hour = !System.Globalization.CultureInfo.CurrentCulture.DateTimeFormat.ShortTimePattern.Contains("t");
-        
+
         string timeText = hoursOnly 
-            ? time.ToString(use24Hour ? "HH" : "hh") 
+            ? time.ToString(use24Hour ? "%H" : "%h") 
             : time.ToString(use24Hour ? "H:mm" : "h:mm");
 
         StringBuilder tooltipText = new();
@@ -132,8 +132,9 @@ internal class TimeNotifyIcon : IDisposable, INotifyPropertyChanged
 
         if (hoursOnly)
         {
-            // Display only the hour, centered
-            using var font = new Drawing.Font("Segoe UI", 20, Drawing.FontStyle.Bold, Drawing.GraphicsUnit.Pixel);
+            // Display only the hour, centered; use larger font for single-digit hours
+            int fontSize = timeText.Length == 1 ? 24 : 17;
+            using var font = new Drawing.Font("Segoe UI", fontSize, Drawing.FontStyle.Bold, Drawing.GraphicsUnit.Pixel);
             using var textBrush = new Drawing.SolidBrush(textColor);
 
             var stringFormat = new Drawing.StringFormat
@@ -154,7 +155,7 @@ internal class TimeNotifyIcon : IDisposable, INotifyPropertyChanged
             string minutes = timeParts.Length > 1 ? timeParts[1] : "";
 
             // Use a font size that fits two lines
-            using var font = new Drawing.Font("Segoe UI", /*18*/17, Drawing.FontStyle.Bold, Drawing.GraphicsUnit.Pixel);
+            using var font = new Drawing.Font("Segoe UI", 17, Drawing.FontStyle.Bold, Drawing.GraphicsUnit.Pixel);
             using var textBrush = new Drawing.SolidBrush(textColor);
 
             var stringFormat = new Drawing.StringFormat
